@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+        <record id="book_tag_tree" model="ir.ui.view">
+            <field name="name">book.tags.tree</field>
+            <field name="model">book.tags</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="tagname"/>
+                    <field name="tagcolor" widget="color_picker"/>
+                    <field name="book_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="book_tag_form" model="ir.ui.view">
+            <field name="name">book.tags.form</field>
+            <field name="model">book.tags</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="tagname"/>
+                            <field name="tagcolor" widget="color_picker"/>
+                            <field name="book_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_book_tags" model="ir.actions.act_window">
+            <field name="name">books.tags</field>
+            <field name="res_model">book.tags</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </odoo>

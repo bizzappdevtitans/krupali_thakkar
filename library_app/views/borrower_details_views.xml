@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+        <record id="book_borrower_form" model="ir.ui.view">
+            <field name="name">borrower.details.form</field>
+            <field name="model">borrower.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="borrowername"/>
+                        </group>
+                        <notebook>
+                            <page string="Book Details">
+                            <!-- you can display child data like code below -->
+                                <field name="book_field_id"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="borrower_details_tree" model="ir.ui.view">
+            <field name="name">borrower.details.tree</field>
+            <field name="model">borrower.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="borrowername"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_borrower_details" model="ir.actions.act_window">
+            <field name="name">borrower.detail</field>
+            <field name="res_model">borrower.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </odoo>
