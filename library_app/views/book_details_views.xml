@@ -115,10 +115,11 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <button name="%(library_app.action_borrower_details)d" string="view Borrowers" type="action" class=
+                        "oe_highlight"/>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
 
                     <header>
-                        <button id="button_confirm" name="action_confirm" string="confirm" class="btn-primary" type="object"/>
                         <field name="state" widget="statusbar" options="{'clickable' : '1'}"/>
                     </header>
 
