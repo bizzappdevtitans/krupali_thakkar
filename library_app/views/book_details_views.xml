@@ -31,21 +31,20 @@
                                         <field name="book_type"/>
                                     </div>
 
-                                    <div>
-                                        <field name="description"/>
-                                    </div>
+
 
                                 </div>
 
                                 <div class="o_kanban_record_bottom">
 
                                     <div class="oe_kanban_bottom_left">
-                                        <field name="average_rating"/>
+
                                         <!-- Left side footer... -->
                                     </div>
 
                                     <div class="oe_kanban_bottom_right">
-                                        <field name="date_published"/>
+                                        <field name="average_rating"/>
+
                                         <!-- Right side footer... -->
                                     </div>
                                 </div><!-- o_kanban_record_bottom -->
@@ -98,8 +97,7 @@
                 <field name="date_returned"  widget="remaining_days"/>
                 <field name="book_price"/>
                 <field name="tag_ids" widget="many2many_tags"/>
-                <field name="progress" widget="percentpie"/>
-                <field name="image" widget="image"/>
+                <field name="borrower_field_id"/>
                 <field name="state" widget="badge"/>
                 <field name="color" widget="color_picker"/>
                 <field name="priority" widget="priority"/>
@@ -115,12 +113,12 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <button name="%(library_app.action_borrower_details)d" string="view Borrowers" type="action" class=
-                        "oe_highlight"/>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
 
                     <header>
-                        <field name="state" widget="statusbar" options="{'clickable' : '1'}"/>
+                        <button id="button_return" name="action_return" string="Return Book" class="btn-primary" type="object"/>
+                         <button id="button_borrow" name="action_borrow" string="Borrow Book" class="btn-primary" type="object"/>
+                        <field name="state" widget="statusbar"/>
                     </header>
 
                     <div>

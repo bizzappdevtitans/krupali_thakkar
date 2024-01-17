@@ -10,3 +10,20 @@ class BookTag(models.Model):
     tagcolor = fields.Integer("Tag color")
 
     book_ids = fields.Many2many("book.details", string="books")
+
+    book_count = fields.Integer(string="count of book", compute="count_book")
+
+    def count_book(self):
+        for records in self:
+            records.book_count = len(self.book_ids)
+
+    def action_view_book(self):
+        return {
+            "name": ("Books"),
+            "res_model": "book.details",
+            "view_mode": "list,form",
+            "context": {},
+            "domain": [("tag_ids", "=", self.tagname)],
+            "target": "current",
+            "type": "ir.actions.act_window",
+        }

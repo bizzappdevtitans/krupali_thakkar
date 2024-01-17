@@ -6,6 +6,8 @@ class BookDetails(models.Model):
     _description = "Information about book"
     _rec_name = "bookname"
 
+    book_count = fields.Integer(compute="count")
+
     bookname = fields.Char("Bookname", required=True)
     is_available = fields.Boolean("Is Available")
     book_type = fields.Selection(
@@ -28,8 +30,6 @@ class BookDetails(models.Model):
     state = fields.Selection(
         [
             ("not_avalible", "Not Available"),
-            ("borrowed", "Borrowed"),
-            ("return", "Returned"),
             ("available", "Available"),
         ],
         "State",
@@ -61,3 +61,14 @@ class BookDetails(models.Model):
             else:
                 progress = 0
             records.progress = progress
+
+    @api.depends()
+    def count(self):
+        count = self.env["book.details"].search_count([("is_available", "=", "True")])
+        self.book_count = count
+
+    def action_return(self):
+        self.state = "available"
+
+    def action_borrow(self):
+        self.state = "not_avalible"

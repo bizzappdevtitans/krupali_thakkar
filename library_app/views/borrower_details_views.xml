@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
     <odoo>
+<!--Form View-->
+
         <record id="book_borrower_form" model="ir.ui.view">
             <field name="name">borrower.details.form</field>
             <field name="model">borrower.details</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        <button class="oe_state_button" type="object" name="action_view_book" icon="fa-book">
+                            <field string="Books" name="book_count" widget="statinfo"/>
+                        </button>
+
+                    </div>
                         <group>
                             <field name="borrowername"/>
                         </group>
@@ -20,15 +28,20 @@
             </field>
         </record>
 
+<!--Tree View-->
+
         <record id="borrower_details_tree" model="ir.ui.view">
             <field name="name">borrower.details.tree</field>
             <field name="model">borrower.details</field>
             <field name="arch" type="xml">
                 <tree>
                     <field name="borrowername"/>
+
                 </tree>
             </field>
         </record>
+
+<!--Action View-->
 
         <record id="action_borrower_details" model="ir.actions.act_window">
             <field name="name">borrower.detail</field>
