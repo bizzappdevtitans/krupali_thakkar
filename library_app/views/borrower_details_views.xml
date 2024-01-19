@@ -16,6 +16,7 @@
                     </div>
                         <group>
                             <field name="borrowername"/>
+
                         </group>
                         <notebook>
                             <page string="Book Details">
@@ -24,6 +25,10 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -36,6 +41,7 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="borrowername"/>
+                     <field name="book_field_id" widget="many2many_tags"/>
 
                 </tree>
             </field>

@@ -13,6 +13,10 @@ class BookTag(models.Model):
 
     book_count = fields.Integer(string="count of book", compute="count_book")
 
+    _sql_constraints = [
+        ("unique_tag_name", "unique (tagname)", "BookTag must be unique")
+    ]
+
     def count_book(self):
         for records in self:
             records.book_count = len(self.book_ids)

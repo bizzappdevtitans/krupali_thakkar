@@ -4,13 +4,16 @@ from odoo import fields, models
 class BorrowerDetails(models.Model):
     _name = "borrower.details"
     _description = "details of borrower"
+    _inherit = ["mail.thread"]
     _rec_name = "borrowername"
 
     borrowername = fields.Char("BorrowerName")
 
     book_count = fields.Integer(string="count of book", compute="count_book")
 
-    book_field_id = fields.One2many("book.details", "borrower_field_id", "bookname")
+    book_field_id = fields.Many2many(
+        "book.details", "book_borrow_rel", "book_id", "borrower_id", "bookname"
+    )
 
     def action_view_book(self):
         return {

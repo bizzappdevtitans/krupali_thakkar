@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<odoo>
+        <record id="create_book_form_view" model="ir.ui.view">
+            <field name="name">create.book.wizard.form</field>
+            <field name="model">create.book.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create New Book">
+                    <group>
+                        <field name="name"/>
+                        <field name="borrower_field_id"/>
+                    </group>
+                    <footer>
+                        <button name="action_create_book" type="object" string="Create" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_create_book" model="ir.actions.act_window">
+            <field name="name">Create Book</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">create.book.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="create_book_form_view"/>
+            <field name="target">new</field>
+        </record>
+</odoo>

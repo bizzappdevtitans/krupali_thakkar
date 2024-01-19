@@ -7,7 +7,7 @@
         <field name="model">book.details</field>
         <field name="arch" type="xml">
 
-            <kanban default_group_by="book_type" class="o_kanban_small_column o_kanban_project_tasks" on_create="quick_create" quick_create_view="project.quick_create_task_form" archivable="false" default_order="last_borrow_date" examples="project" js_class="project_task_kanban" sample="1">
+            <kanban default_group_by="book_type" class="o_kanban_small_column o_kanban_project_tasks" on_create="quick_create" quick_create_view="project.quick_create_task_form" archivable="false" default_order="last_borrow_date" examples="project" js_class="project_task_kanban" sample="1" create="0">
                <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
@@ -86,21 +86,21 @@
         <field name="name">book.details.tree</field>
         <field name="model">book.details</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree delete="0">
                 <field name="bookname"/>
                 <field name="book_type"/>
                 <field name="description"/>
                 <field name="date_published"/>
                 <field name="average_rating"/>
                 <field name="is_available" widget="boolean_toggle"/>
-                <field name="last_borrow_date"/>
+                <field name="last_borrow_date" optional="show"/>
                 <field name="date_returned"  widget="remaining_days"/>
                 <field name="book_price"/>
-                <field name="tag_ids" widget="many2many_tags"/>
-                <field name="borrower_field_id"/>
-                <field name="state" widget="badge"/>
-                <field name="color" widget="color_picker"/>
-                <field name="priority" widget="priority"/>
+                <field name="tag_ids" widget="many2many_tags" optional="show"/>
+                <field name="borrower_field_id" widget="many2many_tags"/>
+                <field name="state" widget="badge" optional="hide"/>
+                <field name="color" widget="color_picker" optional="show"/>
+                <field name="priority" widget="priority" optional="show"/>
                 </tree>
         </field>
     </record>
@@ -113,11 +113,16 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_state_button" type="object" name="action_view_borrower" icon="fa-users">
+                            <field string="Borrower" name="borrower_count" widget="statinfo"/>
+                        </button>
+                    </div>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
 
                     <header>
-                        <button id="button_return" name="action_return" string="Return Book" class="btn-primary" type="object"/>
-                         <button id="button_borrow" name="action_borrow" string="Borrow Book" class="btn-primary" type="object"/>
+                        <button id="button_return" name="action_return" string="Return Book" class="oe_edit_only oe_highlight" type="object" confirm="Please Remove the borrower name who returns a book"/>
+                        <button id="button_borrow" name="action_borrow" string="Borrow Book" class="oe_edit_only oe_highlight" type="object" attrs="{'invisible' : [('number_of_books','=',0)]}" confirm="Please Enter the borrower name who borrows a book"/>
                         <field name="state" widget="statusbar"/>
                     </header>
 
@@ -144,7 +149,8 @@
                             <field name="is_available" widget="boolean_toggle"/>
                              <field name="last_borrow_date"/>
                              <field name="date_returned"/>
-                             <field name="borrower_field_id"/>
+                             <field name="borrower_field_id" widget="many2many_tags"/>
+                             <field name="number_of_books"/>
                              <field name="color" widget="color_picker"/>
                              <field name="image" widget="image"/>
                         </group>
@@ -224,6 +230,6 @@
     <record id="action_book_details" model="ir.actions.act_window">
         <field name="name">books.details</field>
         <field name="res_model">book.details</field>
-        <field name="view_mode">kanban,tree,form,graph,calendar,pivot</field>
+        <field name="view_mode">kanban,tree,form,graph,calendar,pivot,activity</field>
     </record>
 </odoo>

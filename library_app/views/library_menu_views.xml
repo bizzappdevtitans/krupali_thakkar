@@ -23,4 +23,11 @@
             parent="book_details_menu"
             action="action_book_tags"/>
 
+
+        <menuitem
+            id="create_book"
+            name="Craete Book"
+            parent="book_details_menu"
+            action="action_create_book"/>
+
     </odoo>
