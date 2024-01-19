@@ -13,8 +13,11 @@
                             <field string="Books" name="book_count" widget="statinfo"/>
                         </button>
 
+
+
                     </div>
                         <group>
+                            <field name="borrower_ids"/>
                             <field name="borrowername"/>
 
                         </group>

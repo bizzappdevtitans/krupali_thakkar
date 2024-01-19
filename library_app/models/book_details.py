@@ -1,4 +1,5 @@
 from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 
 class BookDetails(models.Model):
@@ -37,7 +38,7 @@ class BookDetails(models.Model):
         ],
         "State",
     )
-    progress = fields.Integer(string="Progress", compute="compute_progress")
+    progress = fields.Integer(string="Progress", compute="_compute_progress")
     color = fields.Integer("Color")
     priority = fields.Selection(
         [("0", "Normal"), ("1", "Low"), ("2", "High"), ("3", "Very High")], "Priority"
@@ -49,24 +50,23 @@ class BookDetails(models.Model):
 
     tag_ids = fields.Many2many("book.tags", string="Tags")
 
-    _sql_constraints = [
-        (
-            "check_price",
-            "check (book_price > 0)",
-            "Rent must be non zero positive value ",
-        ),
-        (
-            "check_count",
-            "check (number_of_books >= 0)",
-            "number must not be Nagative ",
-        ),
-    ]
-
-    def action_confirm(self):
+    def _action_confirm(self):
         print("button")
 
+    @api.constrains("book_price")
+    def _check_book_price(self):
+        for records in self:
+            if records.book_price < 0:
+                raise ValidationError("book price must be non zero positive number")
+
+    @api.constrains("number_of_books")
+    def _check_number_of_books(self):
+        for records in self:
+            if records.number_of_books < 0:
+                raise ValidationError("Number must not be Nagative")
+
     @api.depends("state")
-    def compute_progress(self):
+    def _compute_progress(self):
         for records in self:
             if records.state == "not_avalible":
                 progress = 0
@@ -76,10 +76,12 @@ class BookDetails(models.Model):
                 progress = 0
             records.progress = progress
 
+    @api.depends("number_of_books")
     def action_return(self):
         self.number_of_books += 1
         self.state = "available"
 
+    @api.onchange("number_of_books")
     def action_borrow(self):
         self.number_of_books -= 1
         if self.number_of_books < 1:

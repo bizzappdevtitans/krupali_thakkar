@@ -8,6 +8,7 @@ class BorrowerDetails(models.Model):
     _rec_name = "borrowername"
 
     borrowername = fields.Char("BorrowerName")
+    borrower_ids = fields.Char("Borrower ID")
 
     book_count = fields.Integer(string="count of book", compute="count_book")
 

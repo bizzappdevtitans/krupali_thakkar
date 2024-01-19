@@ -98,7 +98,7 @@
                 <field name="book_price"/>
                 <field name="tag_ids" widget="many2many_tags" optional="show"/>
                 <field name="borrower_field_id" widget="many2many_tags"/>
-                <field name="state" widget="badge" optional="hide"/>
+                <field name="state" widget="badge" optional="hide" decoration-success="state == 'available'" decoration-danger="state == 'not_avalible'"/>
                 <field name="color" widget="color_picker" optional="show"/>
                 <field name="priority" widget="priority" optional="show"/>
                 </tree>

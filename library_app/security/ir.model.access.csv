@@ -2,7 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 library_app.access_book_details,access_book_details,library_app.model_book_details,base.group_user,1,1,1,1
 library_app.access_borrower_details,access_borrower_details,library_app.model_borrower_details,base.group_user,1,1,1,1
 library_app.access_book_tags,access_book_tags,library_app.model_book_tags,base.group_user,1,1,1,1
-library_app.access_create_book_wizard,access_create_book_wizard,library_app.model_create_book_wizard,base.group_user,1,1,1,1
+
 
 
 
