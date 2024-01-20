@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+
+<!--Tree View-->
+
+        <record id="teachres_details_tree" model="ir.ui.view">
+            <field name="name">teacher.details.tree</field>
+            <field name="model">teachers.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="teacher_name"/>
+                    <field name="teacher_gender"/>
+                    <field name="teacher_phone_number"/>
+                    <field name="teacher_email"/>
+                    <field name="course_field_id"/>
+                    <field name="subject_field_id" widget="many2many_tags"/>
+                    <field name="experiance"/>
+                    <field name="student_field_id" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+<!--Form View-->
+
+        <record id="teachres_details_form" model="ir.ui.view">
+            <field name="name">teachers.details.form</field>
+            <field name="model">teachers.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users">
+                                <field string="Students" name="student_count" widget="statinfo"/>
+                            </button>
+
+                             <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-users">
+                                <field string="Subjects" name="subject_count" widget="statinfo"/>
+                            </button>
+
+                        </div>
+                        <group>
+                            <field name="teacher_name"/>
+                            <field name="teacher_gender" widget="radio"/>
+                            <field name="teacher_phone_number"/>
+                            <field name="teacher_email"/>
+                            <field name="course_field_id"/>
+                            <field name="subject_field_id"/>
+                            <field name="experiance"/>
+                            <field name="student_field_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+<!--Action View-->
+
+        <record id="action_teachers_details" model="ir.actions.act_window">
+            <field name="name">teacher.details</field>
+            <field name="res_model">teachers.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </odoo>
+
+

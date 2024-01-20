@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+        <menuitem
+            id = "school_menu"
+            name = "School"
+            />
+
+        <menuitem
+            id = "student_details_menu"
+            name = "Students"
+            parent = "school_menu"
+            action = "action_student_details"/>
+
+        <menuitem
+            id = "teachres_details_menu"
+            name = "Teachers"
+            parent = "school_menu"
+            action = "action_teachers_details"/>
+
+
+        <menuitem
+            id = "couese_details_menu"
+            name = "Courses"
+            parent = "school_menu"
+            action = "action_course_details"/>
+
+
+        <menuitem
+            id = "subjects_details_menu"
+            name = "Subjects"
+            parent = "school_menu"
+            action = "action_subject_details"/>
+
+    </odoo>
