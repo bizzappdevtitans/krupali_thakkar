@@ -4,6 +4,11 @@
             id = "school_menu"
             name = "School"
             />
+        <menuitem
+            id = "Course_menu"
+            name = "Course"
+            parent="school_menu"
+            />
 
         <menuitem
             id = "student_details_menu"
@@ -19,16 +24,22 @@
 
 
         <menuitem
-            id = "couese_details_menu"
+            id = "course_details_menu"
             name = "Courses"
-            parent = "school_menu"
+            parent = "Course_menu"
             action = "action_course_details"/>
 
 
         <menuitem
             id = "subjects_details_menu"
             name = "Subjects"
-            parent = "school_menu"
+            parent = "Course_menu"
             action = "action_subject_details"/>
+
+        <menuitem
+            id = "exam_details_menu"
+            name = "Exams"
+            parent = "school_menu"
+            action = "action_exam_details"/>
 
     </odoo>

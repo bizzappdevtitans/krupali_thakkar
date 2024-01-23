@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 class CourseDetails(models.Model):
@@ -16,6 +17,7 @@ class CourseDetails(models.Model):
     teacher_field_id = fields.One2many(
         "teachers.details", "course_field_id", "teacher_name"
     )
+    exam_field_id = fields.One2many("exam.details", "course_field_id", "Exam Name")
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
@@ -44,7 +46,6 @@ class CourseDetails(models.Model):
             "name": "Students",
             "res_model": "student.details",
             "view_mode": "tree,form",
-            "context": {},
             "domain": [("course_field_id", "=", self.course_name)],
             "target": "current",
             "type": "ir.actions.act_window",
@@ -55,7 +56,6 @@ class CourseDetails(models.Model):
             "name": "Subjects",
             "res_model": "subject.details",
             "view_mode": "tree,form",
-            "context": {},
             "domain": [("course_field_id", "=", self.course_name)],
             "target": "current",
             "type": "ir.actions.act_window",
@@ -66,8 +66,13 @@ class CourseDetails(models.Model):
             "name": "Teachers",
             "res_model": "teachers.details",
             "view_mode": "tree,form",
-            "context": {},
             "domain": [("course_field_id", "=", self.course_name)],
             "target": "current",
             "type": "ir.actions.act_window",
         }
+
+    @api.constrains("course_name")
+    def _check_course(self):
+        for records in self:
+            if records.course_name == records.course_name:
+                raise ValidationError("Course Name Must be unique")

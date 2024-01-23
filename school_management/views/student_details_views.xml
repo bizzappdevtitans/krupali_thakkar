@@ -14,10 +14,7 @@
                     <field name="student_age"/>
                     <field name="father_name"/>
                     <field name="mother_name"/>
-                    <field name="student_phone"/>
-                    <field name="student_image"/>
-                    <field name="teacher_field_id" widget="many2many_tags"/>
-                    <field name="subject_field_id" widget="many2many_tags"/>
+                    <field name="student_phone" widget="phone"/>
                     <field name="course_field_id"/>
                     <field name="student_email" widget="email"/>
                 </tree>
@@ -37,28 +34,65 @@
                             <field string="Teachers" name="teachers_count" widget="statinfo"/>
                         </button>
 
-                        <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-users">
+                         <button class="oe_state_button" type="object" name="action_view_exam" icon="fa-book">
+                            <field string="Exams" name="exam_count" widget="statinfo"/>
+                        </button>
+
+                        <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book">
                             <field string="Subjects" name="subject_count" widget="statinfo"/>
                         </button>
                     </div>
-                    <group>
-                        <field name="student_name"/>
-                        <field name="gender" widget="radio"/>
-                        <field name="birth_date"/>
-                        <field name="student_age"/>
-                        <field name="father_name"/>
-                        <field name="mother_name"/>
-                        <field name="student_phone"/>
-                        <field name="student_image"/>
-                        <field name="teacher_field_id"/>
-                        <field name="subject_field_id"/>
-                        <field name="course_field_id"/>
-                        <field name="student_email" widget="email"/>
+                    <group name="group_top">
+                        <group name="group_left">
+                            <field name="student_name"/>
+                            <field name="gender" widget="radio"/>
+                            <field name="birth_date"/>
+                            <field name="student_age"/>
+                            <field name="father_name"/>
+                            <field name="mother_name"/>
+
+                        </group>
+
+                        <group name="group_right">
+
+                            <field name="student_image" widget="image" class="oe_avatar"/>
+
+                            <field name="student_phone" widget="phone"/>
+                             <field name="student_email" widget="email"/>
+
+                            <field name="course_field_id"/>
+                            <field name="subject_field_id" domain="[('course_field_id', '=', course_field_id)]" widget="many2many_tags"/>
+
+
+
+                        </group>
                     </group>
+
                 </sheet>
             </form>
         </field>
     </record>
+
+<!--Search View-->
+
+    <record id="student_details_search" model="ir.ui.view">
+            <field name="name">student.details.search</field>
+            <field name="model">student.details</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="student_name"/>
+                    <field name="gender"/>
+                    <field name="birth_date"/>
+                    <field name="student_age"/>
+                    <field name="student_phone"/>
+                    <field name="teacher_field_id" widget="many2many_tags"/>
+                    <field name="subject_field_id" widget="many2many_tags"/>
+                    <field name="course_field_id"/>
+                </search>
+            </field>
+        </record>
+
+
 <!--Action View-->
 
         <record id="action_student_details" model="ir.actions.act_window">

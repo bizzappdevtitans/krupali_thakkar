@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 class SubjectDetails(models.Model):
@@ -6,7 +7,7 @@ class SubjectDetails(models.Model):
     _description = "Details about the subjects"
     _rec_name = "subject_name"
 
-    subject_name = fields.Char("Subject Name")
+    subject_name = fields.Char("Subject Name", required=True)
     course_field_id = fields.Many2one("course.details", "course_name", required=True)
     teacher_field_id = fields.Many2many(
         "teachers.details",
@@ -22,6 +23,8 @@ class SubjectDetails(models.Model):
         "subject_id",
         "Student Name",
     )
+
+    exam_field_id = fields.One2many("exam.details", "subject_field_id", "Exam Name")
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
     teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
@@ -59,3 +62,9 @@ class SubjectDetails(models.Model):
             "target": "current",
             "type": "ir.actions.act_window",
         }
+
+    @api.constrains("subject_name")
+    def _check_subject(self):
+        for records in self:
+            if records.subject_name == records.subject_name:
+                raise ValidationError("Subject Name Must be unique")

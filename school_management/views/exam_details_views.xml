@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+
+<!--Tree View-->
+        <record id="exam_details_tree" model="ir.ui.view">
+            <field name="name">exam.details.tree</field>
+            <field name="model">exam.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="exam_name"/>
+                    <field name="exam_date"/>
+                    <field name="subject_field_id"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+<!--Form View-->
+
+    <record id="exam_details_form" model="ir.ui.view">
+        <field name="name">exam.details.form</field>
+        <field name="model">exam.details</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users">
+                                <field string="Students" name="student_count" widget="statinfo"/>
+                            </button>
+                    </div>
+                    <group>
+                        <field name="exam_name"/>
+                        <field name="exam_date" options="{'datepicker':{'minDate': 'now'}}"/>
+                        <field name="exam_duration"/>
+                        <field name="course_field_id"/>
+                        <field name="subject_field_id" domain="[('course_field_id', '=', course_field_id)]"/>
+                        <field name="student_field_id" domain="[('subject_field_id', '=', subject_field_id)]" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+<!--Search View-->
+        <record id="exam_details_search" model="ir.ui.view">
+            <field name="name">exam.details.search</field>
+            <field name="model">exam.details</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="exam_name"/>
+                    <field name="exam_date"/>
+
+                    <field name="course_field_id"/>
+                    <field name="subject_field_id"/>
+
+
+                </search>
+            </field>
+        </record>
+
+
+<!--Calender view -->
+
+    <record id="Exam_details_calender" model="ir.ui.view">
+        <field name="name">exam.details.calender</field>
+        <field name="model">exam.details</field>
+        <field name="arch" type="xml">
+            <calendar date_start="exam_date">
+                <field name="subject_field_id"/>
+            </calendar>
+        </field>
+    </record>
+
+
+
+<!--Action View-->
+        <record id="action_exam_details" model="ir.actions.act_window">
+            <field name="name">exams.details</field>
+            <field name="res_model">exam.details</field>
+            <field name="view_mode">tree,form,calendar</field>
+        </record>
+    </odoo>

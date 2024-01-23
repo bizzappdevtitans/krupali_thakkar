@@ -1,4 +1,6 @@
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+import re
 
 
 class TeachersDetails(models.Model):
@@ -6,12 +8,12 @@ class TeachersDetails(models.Model):
     _description = "Information about the teachers"
     _rec_name = "teacher_name"
 
-    teacher_name = fields.Char("Teacher Name")
+    teacher_name = fields.Char("Teacher Name", required=True)
     teacher_gender = fields.Selection(
-        [("male", "Male"), ("female", "Female")], "Gender"
+        [("male", "Male"), ("female", "Female")], "Gender", required=True
     )
-    teacher_phone_number = fields.Integer("Contact Number")
-    teacher_email = fields.Char("Email ID")
+    teacher_phone_number = fields.Char("Contact Number", required=True)
+    teacher_email = fields.Char("Email ID", required=True)
     course_field_id = fields.Many2one("course.details", "course_name", required=True)
     subject_field_id = fields.Many2many(
         "subject.details",
@@ -30,7 +32,7 @@ class TeachersDetails(models.Model):
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
-    experiance = fields.Integer("Experiance")
+    experiance = fields.Char("Experiance")
 
     def _count_of_students(self):
         for record in self:
@@ -65,3 +67,20 @@ class TeachersDetails(models.Model):
             "target": "current",
             "type": "ir.actions.act_window",
         }
+
+    @api.onchange("teacher_phone_number")
+    def validate_phone(self):
+        if self.teacher_phone_number:
+            match = re.match("^[0-9]\d{9}$", self.teacher_phone_number)
+            if match == None:
+                raise ValidationError("Enter Valid 10 digit Phone Number")
+
+    @api.onchange("teacher_email")
+    def validate_mail(self):
+        if self.teacher_email:
+            match = re.match(
+                "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$",
+                self.teacher_email,
+            )
+            if match == None:
+                raise ValidationError("Not a valid E-mail ID")

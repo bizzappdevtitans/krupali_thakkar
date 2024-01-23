@@ -11,7 +11,7 @@
                     <field name="subject_name"/>
                     <field name="course_field_id"/>
                     <field name="teacher_field_id" widget="many2many_tags"/>
-                    <field name="student_field_id" widget="many2many_tags"/>
+
                 </tree>
             </field>
         </record>
@@ -36,14 +36,31 @@
                         <group>
                             <field name="subject_name"/>
                             <field name="course_field_id"/>
-                            <field name="teacher_field_id"/>
-                            <field name="student_field_id"/>
-
+                            <field name="teacher_field_id" domain="[('course_field_id', '=', course_field_id)]"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
+
+<!--Search View-->
+
+        <record id="subject_details_tree" model="ir.ui.view">
+            <field name="name">subject.details.search</field>
+            <field name="model">subject.details</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="subject_name"/>
+                    <field name="course_field_id"/>
+                    <field name="teacher_field_id" widget="many2many_tags"/>
+
+
+
+                </search>
+            </field>
+        </record>
+
+
 
 <!--Action View-->
         <record id="action_subject_details" model="ir.actions.act_window">

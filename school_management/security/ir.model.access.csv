@@ -3,4 +3,4 @@ school_management.access_student_details,access_student_details,school_managemen
 school_management.access_teachers_details,access_teachers_details,school_management.model_teachers_details,base.group_user,1,1,1,1
 school_management.access_subject_details,access_subject_details,school_management.model_subject_details,base.group_user,1,1,1,1
 school_management.access_course_details,access_course_details,school_management.model_course_details,base.group_user,1,1,1,1
-
+school_management.access_exam_details,access_exam_details,school_management.model_exam_details,base.group_user,1,1,1,1

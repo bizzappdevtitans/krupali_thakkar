@@ -10,7 +10,6 @@
             <tree>
                 <field name="course_name"/>
                 <field name="subject_field_id" widget="many2many_tags"/>
-                <field name="student_field_id" widget="many2many_tags"/>
                 <field name="teacher_field_id" widget="many2many_tags"/>
             </tree>
         </field>
@@ -29,7 +28,7 @@
                                 <field string="Students" name="student_count" widget="statinfo"/>
                             </button>
 
-                            <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-users">
+                            <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book">
                                 <field string="Subjects" name="subject_count" widget="statinfo"/>
                             </button>
 
@@ -39,12 +38,28 @@
                         </div>
                     <group>
                         <field name="course_name"/>
-                        <field name="subject_field_id"/>
-                        <field name="student_field_id" widget="many2many_tags"/>
-                        <field name="teacher_field_id"/>
+                        <field name="subject_field_id" widget="many2many_tags"  domain="[('course_field_id', '=', course_name)]"/>
+                        <field name="teacher_field_id" widget="many2many_tags"/>
+
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+<!--Search View-->
+
+    <record id="course_details_search" model="ir.ui.view">
+        <field name="name">course.details.search</field>
+        <field name="model">course.details</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="course_name"/>
+                <field name="subject_field_id" widget="many2many_tags"/>
+                <field name="student_field_id" widget="many2many_tags"/>
+                <field name="teacher_field_id" widget="many2many_tags"/>
+
+            </search>
         </field>
     </record>
 
