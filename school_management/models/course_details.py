@@ -23,6 +23,14 @@ class CourseDetails(models.Model):
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
     teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
 
+    _sql_constraints = [
+        (
+            "unique_course",
+            "unique(course_name)",
+            "Course Name Must be unique",
+        ),
+    ]
+
     def _count_of_students(self):
         for record in self:
             record.student_count = self.env["student.details"].search_count(
@@ -70,9 +78,3 @@ class CourseDetails(models.Model):
             "target": "current",
             "type": "ir.actions.act_window",
         }
-
-    @api.constrains("course_name")
-    def _check_course(self):
-        for records in self:
-            if records.course_name == records.course_name:
-                raise ValidationError("Course Name Must be unique")

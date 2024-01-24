@@ -9,6 +9,11 @@
             name = "Course"
             parent="school_menu"
             />
+        <menuitem
+            id = "exam_menu"
+            name = "Exams"
+            parent="school_menu"
+            />
 
         <menuitem
             id = "student_details_menu"
@@ -39,7 +44,14 @@
         <menuitem
             id = "exam_details_menu"
             name = "Exams"
-            parent = "school_menu"
+            parent = "exam_menu"
             action = "action_exam_details"/>
+
+        <menuitem
+            id = "result_details_menu"
+            name = "Result"
+            parent = "exam_menu"
+            action = "action_result_details"/>
+
 
     </odoo>

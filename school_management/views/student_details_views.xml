@@ -8,6 +8,7 @@
             <field name="model">student.details</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="student_id"/>
                     <field name="student_name"/>
                     <field name="gender"/>
                     <field name="birth_date"/>
@@ -29,6 +30,7 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users">
                             <field string="Teachers" name="teachers_count" widget="statinfo"/>
@@ -42,8 +44,13 @@
                             <field string="Subjects" name="subject_count" widget="statinfo"/>
                         </button>
                     </div>
+
                     <group name="group_top">
+
                         <group name="group_left">
+                            <h2>
+                                <field name="student_id"/>
+                            </h2>
                             <field name="student_name"/>
                             <field name="gender" widget="radio"/>
                             <field name="birth_date"/>
@@ -54,6 +61,7 @@
                         </group>
 
                         <group name="group_right">
+
 
                             <field name="student_image" widget="image" class="oe_avatar"/>
 
@@ -88,6 +96,9 @@
                     <field name="teacher_field_id" widget="many2many_tags"/>
                     <field name="subject_field_id" widget="many2many_tags"/>
                     <field name="course_field_id"/>
+                    <filter name="group_course" string="By course" context="{'group_by': 'course_field_id'}"/>
+                    <filter name="filter_male_students" string="Male Student" domain="[('gender','=','male')]"/>
+                    <filter name="filter_female_students" string="Female Student" domain="[('gender','=','female')]"/>
                 </search>
             </field>
         </record>

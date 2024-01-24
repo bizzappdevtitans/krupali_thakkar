@@ -8,6 +8,7 @@
     "depends": ["base"],
     "data": [
         "security/ir.model.access.csv",
+        "views/result_details_views.xml",
         "views/exam_details_views.xml",
         "views/course_details_views.xml",
         "views/subject_details_views.xml",

@@ -10,6 +10,7 @@ class StudentDetails(models.Model):
     _rec_name = "student_name"
 
     student_name = fields.Char("Student Name", required=True)
+    student_id = fields.Integer("Student ID")
     gender = fields.Selection(
         [("male", "Male"), ("female", "Female")], "Gender", required=True
     )
@@ -51,7 +52,6 @@ class StudentDetails(models.Model):
             today = date.today()
             current_year = today.year
 
-            # if records.birth_date:
             if (
                 records.birth_date.year > current_year - 100
                 and records.birth_date.year < current_year - 10
@@ -77,6 +77,14 @@ class StudentDetails(models.Model):
             record.exam_count = self.env["exam.details"].search_count(
                 [("student_field_id", "=", self.student_name)]
             )
+
+    _sql_constraints = [
+        (
+            "unique_student_id",
+            "unique(student_id)",
+            "Student id Must be unique",
+        ),
+    ]
 
     def action_view_teacher(self):
         return {

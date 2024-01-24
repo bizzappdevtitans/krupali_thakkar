@@ -73,7 +73,9 @@
                     <field name="course_field_id"/>
                     <field name="subject_field_id" widget="many2many_tags"/>
                     <field name="experiance"/>
-
+                    <filter name="group_course" string="By course" context="{'group_by': 'course_field_id'}"/>
+                    <filter name="filter_male_teacher" string="Male Teacher" domain="[('teacher_gender','=','male')]"/>
+                    <filter name="filter_female_teacher" string="Female Teacher" domain="[('teacher_gender','=','female')]"/>
                 </search>
             </field>
         </record>
