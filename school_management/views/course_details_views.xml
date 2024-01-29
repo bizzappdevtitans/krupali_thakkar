@@ -8,9 +8,9 @@
         <field name="model">course.details</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="course_name"/>
-                <field name="subject_field_id" widget="many2many_tags"/>
-                <field name="teacher_field_id" widget="many2many_tags"/>
+                <field name="name"/>
+                <field name="subject_ids" widget="many2many_tags"/>
+                <field name="teacher_ids" widget="many2many_tags"/>
             </tree>
         </field>
     </record>
@@ -24,22 +24,22 @@
             <form>
                 <sheet>
                      <div class="oe_button_box" name="button_box">
-                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users">
+                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
                                 <field string="Students" name="student_count" widget="statinfo"/>
                             </button>
 
-                            <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book">
+                            <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book" attrs="{'invisible':[('subject_count','==',0)]}">
                                 <field string="Subjects" name="subject_count" widget="statinfo"/>
                             </button>
 
-                            <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users">
+                            <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users" attrs="{'invisible':[('teachers_count','==',0)]}">
                                 <field string="Teachers" name="teachers_count" widget="statinfo"/>
                             </button>
                         </div>
                     <group>
-                        <field name="course_name"/>
-                        <field name="subject_field_id" widget="many2many_tags"  domain="[('course_field_id', '=', course_name)]"/>
-                        <field name="teacher_field_id" widget="many2many_tags"/>
+                        <field name="name"/>
+                        <field name="subject_ids" widget="many2many_tags"  domain="[('course_field_id', '=', name)]"/>
+                        <field name="teacher_ids" widget="many2many_tags"/>
 
                     </group>
                 </sheet>
@@ -54,10 +54,10 @@
         <field name="model">course.details</field>
         <field name="arch" type="xml">
             <search>
-                <field name="course_name"/>
-                <field name="subject_field_id" widget="many2many_tags"/>
-                <field name="student_field_id" widget="many2many_tags"/>
-                <field name="teacher_field_id" widget="many2many_tags"/>
+                <field name="name"/>
+                <field name="subject_ids" widget="many2many_tags"/>
+                <field name="student_ids" widget="many2many_tags"/>
+                <field name="teacher_ids" widget="many2many_tags"/>
 
             </search>
         </field>

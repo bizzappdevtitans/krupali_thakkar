@@ -21,7 +21,7 @@ class StudentDetails(models.Model):
     student_phone = fields.Char("Phone Number")
     student_image = fields.Binary()
     student_email = fields.Char("Email")
-    teacher_field_id = fields.Many2many(
+    teacher_ids = fields.Many2many(
         "teachers.details",
         "student_teacher_rel",
         "teacher_id",
@@ -29,20 +29,22 @@ class StudentDetails(models.Model):
         "Teacher Name",
     )
     course_field_id = fields.Many2one("course.details", "Course Name", required=True)
-    subject_field_id = fields.Many2many(
+    subject_ids = fields.Many2many(
         "subject.details",
         "subject_student_rel",
         "subject_id",
         "student_id",
         "Subject Name",
     )
-    exam_field_id = fields.Many2many(
+    exam_ids = fields.Many2many(
         "exam.details",
         "exam_student_rel",
         "exam_id",
         "student_id",
         "Exam Name",
     )
+    reult_name = fields.One2many("result.details", "student_name", "result")
+
     teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
     exam_count = fields.Integer("Exams", compute="_count_of_exams")
@@ -63,19 +65,19 @@ class StudentDetails(models.Model):
     def _count_of_teachers(self):
         for record in self:
             record.teachers_count = self.env["teachers.details"].search_count(
-                [("student_field_id", "=", self.student_name)]
+                [("student_ids", "=", self.student_name)]
             )
 
     def _count_of_subjects(self):
         for record in self:
             record.subject_count = self.env["subject.details"].search_count(
-                [("student_field_id", "=", self.student_name)]
+                [("student_ids", "=", self.student_name)]
             )
 
     def _count_of_exams(self):
         for record in self:
             record.exam_count = self.env["exam.details"].search_count(
-                [("student_field_id", "=", self.student_name)]
+                [("student_ids", "=", self.student_name)]
             )
 
     _sql_constraints = [
@@ -87,37 +89,74 @@ class StudentDetails(models.Model):
     ]
 
     def action_view_teacher(self):
-        return {
-            "name": "Teachers",
-            "res_model": "teachers.details",
-            "view_mode": "tree,form",
-            "context": {},
-            "domain": [("student_field_id", "=", self.student_name)],
-            "target": "current",
-            "type": "ir.actions.act_window",
-        }
+        if self.teachers_count == 1:
+            return {
+                "name": "Teachers",
+                "type": "ir.actions.act_window",
+                "view_type": "form",
+                "view_mode": "form",
+                "res_model": "teachers.details",
+                "res_id": self.teacher_ids.id,
+                "target": "new",
+            }
+        else:
+            return {
+                "name": "Teachers",
+                "res_model": "teachers.details",
+                "view_mode": "tree,form",
+                "context": {},
+                "domain": [("student_ids", "=", self.student_name)],
+                "target": "current",
+                "type": "ir.actions.act_window",
+            }
 
     def action_view_subjects(self):
-        return {
-            "name": "Subjects",
-            "res_model": "subject.details",
-            "view_mode": "tree,form",
-            "context": {},
-            "domain": [("student_field_id", "=", self.student_name)],
-            "target": "current",
-            "type": "ir.actions.act_window",
-        }
+        if self.subject_count == 1:
+            return {
+                "name": "Subjects",
+                "type": "ir.actions.act_window",
+                "view_type": "form",
+                "view_mode": "form",
+                "res_model": "subject.details",
+                "res_id": self.subject_ids.id,
+                "target": "new",
+            }
+
+        else:
+            return {
+                "name": "Subjects",
+                "res_model": "subject.details",
+                "view_mode": "tree,form",
+                "context": {},
+                "domain": [("student_ids", "=", self.student_name)],
+                "target": "current",
+                "type": "ir.actions.act_window",
+            }
 
     def action_view_exam(self):
-        return {
-            "name": "Exams",
-            "res_model": "exam.details",
-            "view_mode": "tree,form",
-            "context": {},
-            "domain": [("student_field_id", "=", self.student_name)],
-            "target": "current",
-            "type": "ir.actions.act_window",
-        }
+        if self.exam_count == 1:
+            return {
+                "name": "Exams",
+                "type": "ir.actions.act_window",
+                "view_type": "form",
+                "view_mode": "form",
+                "res_model": "exam.details",
+                "res_id": self.exam_ids.id,
+                "target": "new",
+            }
+        else:
+            return {
+                "name": "Exams",
+                "res_model": "exam.details",
+                "view_mode": "tree,form",
+                "context": {},
+                "domain": [("student_ids", "=", self.student_name)],
+                "target": "current",
+                "type": "ir.actions.act_window",
+            }
+
+    def action_view_result(self):
+        pass
 
     @api.onchange("student_phone")
     def validate_phone(self):

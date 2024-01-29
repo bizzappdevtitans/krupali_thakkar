@@ -10,7 +10,7 @@
                 <tree>
                     <field name="subject_name"/>
                     <field name="course_field_id"/>
-                    <field name="teacher_field_id" widget="many2many_tags"/>
+                    <field name="teacher_ids" widget="many2many_tags"/>
 
                 </tree>
             </field>
@@ -25,18 +25,18 @@
                 <form>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users">
+                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
                                 <field string="Students" name="student_count" widget="statinfo"/>
                             </button>
 
-                            <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users">
+                            <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users" attrs="{'invisible':[('teachers_count','==',0)]}">
                                 <field string="Teachers" name="teachers_count" widget="statinfo"/>
                             </button>
                         </div>
                         <group>
                             <field name="subject_name"/>
                             <field name="course_field_id"/>
-                            <field name="teacher_field_id" domain="[('course_field_id', '=', course_field_id)]"/>
+                            <field name="teacher_ids" domain="[('course_field_id', '=', course_field_id)]"/>
                         </group>
                     </sheet>
                 </form>
@@ -52,7 +52,7 @@
                 <search>
                     <field name="subject_name"/>
                     <field name="course_field_id"/>
-                    <field name="teacher_field_id" widget="many2many_tags"/>
+                    <field name="teacher_ids" widget="many2many_tags"/>
 
 
 

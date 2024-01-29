@@ -8,13 +8,13 @@ class ResultDetails(models.Model):
     student_name = fields.Char("Student Name")
     student_id = fields.Integer("Student ID")
     student_course = fields.Char("Course")
-    subject_name = fields.Many2many("subject.details", "subject")
+    exam_name = fields.Many2many("exam.details", "exam")
 
     @api.onchange("student_id")
     def _view_student_name(self):
-        student_field_id = self.env["student.details"].search(
+        view_student_id = self.env["student.details"].search(
             [("student_id", "=", self.student_id)]
         )
 
-        self.student_name = student_field_id.student_name
-        self.student_course = student_field_id.course_field_id.course_name
+        self.student_name = view_student_id.student_name
+        self.student_course = view_student_id.course_field_id.name

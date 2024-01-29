@@ -13,7 +13,7 @@
                     <field name="teacher_phone_number"/>
                     <field name="teacher_email"/>
                     <field name="course_field_id"/>
-                    <field name="subject_field_id" widget="many2many_tags"/>
+                    <field name="subject_ids" widget="many2many_tags"/>
                     <field name="experiance"/>
 
                 </tree>
@@ -29,11 +29,11 @@
                 <form>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users">
+                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
                                 <field string="Students" name="student_count" widget="statinfo"/>
                             </button>
 
-                             <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book">
+                             <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book" attrs="{'invisible':[('subject_count','==',0)]}">
                                 <field string="Subjects" name="subject_count" widget="statinfo"/>
                             </button>
 
@@ -49,9 +49,9 @@
                             <group name="group_right">
 
                                 <field name="course_field_id"/>
-                                <field name="subject_field_id" widget="many2many_tags" domain="[('course_field_id', '=', course_field_id)]"/>
+                                <field name="subject_ids" widget="many2many_tags" domain="[('course_field_id', '=', course_field_id)]"/>
                                 <field name="experiance"/>
-                                 <field name="student_field_id" widget="many2many_tags" domain="[('course_field_id', '=', course_field_id)]"/>
+                                 <field name="student_ids" widget="many2many_tags" domain="[('course_field_id', '=', course_field_id)]"/>
                             </group>
 
                         </group>
@@ -71,11 +71,12 @@
                     <field name="teacher_name"/>
                     <field name="teacher_gender"/>
                     <field name="course_field_id"/>
-                    <field name="subject_field_id" widget="many2many_tags"/>
+                    <field name="subject_ids" widget="many2many_tags"/>
                     <field name="experiance"/>
                     <filter name="group_course" string="By course" context="{'group_by': 'course_field_id'}"/>
                     <filter name="filter_male_teacher" string="Male Teacher" domain="[('teacher_gender','=','male')]"/>
                     <filter name="filter_female_teacher" string="Female Teacher" domain="[('teacher_gender','=','female')]"/>
+                    <filter name="filter_experienced_teachers" string="experianced Teacher" domain="[('experiance','>=','2')]"/>
                 </search>
             </field>
         </record>

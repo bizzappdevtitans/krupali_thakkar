@@ -14,15 +14,15 @@ class TeachersDetails(models.Model):
     )
     teacher_phone_number = fields.Char("Contact Number", required=True)
     teacher_email = fields.Char("Email ID", required=True)
-    course_field_id = fields.Many2one("course.details", "course_name", required=True)
-    subject_field_id = fields.Many2many(
+    course_field_id = fields.Many2one("course.details", "course name", required=True)
+    subject_ids = fields.Many2many(
         "subject.details",
         "subject_teacher_rel",
         "subject_id",
         "teacher_id",
         "Subject Name",
     )
-    student_field_id = fields.Many2many(
+    student_ids = fields.Many2many(
         "student.details",
         "student_teacher_rel",
         "student_id",
@@ -32,41 +32,63 @@ class TeachersDetails(models.Model):
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
-    experiance = fields.Char("Experiance")
+    experiance = fields.Integer("Experiance in years")
 
     def _count_of_students(self):
         for record in self:
             record.student_count = self.env["student.details"].search_count(
-                [("teacher_field_id", "=", self.teacher_name)]
+                [("teacher_ids", "=", self.teacher_name)]
             )
 
     def _count_of_subjects(self):
         for record in self:
             record.subject_count = self.env["subject.details"].search_count(
-                [("teacher_field_id", "=", self.teacher_name)]
+                [("teacher_ids", "=", self.teacher_name)]
             )
 
     def action_view_student(self):
-        return {
-            "name": "Students",
-            "res_model": "student.details",
-            "view_mode": "tree,form",
-            "context": {},
-            "domain": [("teacher_field_id", "=", self.teacher_name)],
-            "target": "current",
-            "type": "ir.actions.act_window",
-        }
+        if self.student_count == 1:
+            return {
+                "name": "Students",
+                "type": "ir.actions.act_window",
+                "view_type": "form",
+                "view_mode": "form",
+                "res_model": "student.details",
+                "res_id": self.student_ids.id,
+                "target": "new",
+            }
+        else:
+            return {
+                "name": "Students",
+                "res_model": "student.details",
+                "view_mode": "tree,form",
+                "context": {},
+                "domain": [("teacher_ids", "=", self.teacher_name)],
+                "target": "current",
+                "type": "ir.actions.act_window",
+            }
 
     def action_view_subjects(self):
-        return {
-            "name": "Subects",
-            "res_model": "subject.details",
-            "view_mode": "tree,form",
-            "context": {},
-            "domain": [("teacher_field_id", "=", self.teacher_name)],
-            "target": "current",
-            "type": "ir.actions.act_window",
-        }
+        if self.subject_count == 1:
+            return {
+                "name": "Subjects",
+                "type": "ir.actions.act_window",
+                "view_type": "form",
+                "view_mode": "form",
+                "res_model": "subject.details",
+                "res_id": self.subject_ids.id,
+                "target": "new",
+            }
+        else:
+            return {
+                "name": "Subjects",
+                "res_model": "subject.details",
+                "view_mode": "tree,form",
+                "context": {},
+                "domain": [("teacher_ids", "=", self.teacher_name)],
+                "target": "current",
+                "type": "ir.actions.act_window",
+            }
 
     @api.onchange("teacher_phone_number")
     def validate_phone(self):
