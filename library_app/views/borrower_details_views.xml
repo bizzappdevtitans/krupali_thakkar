@@ -9,25 +9,22 @@
                 <form>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                        <button class="oe_state_button" type="object" name="action_view_book" icon="fa-book">
-                            <field string="Books" name="book_count" widget="statinfo"/>
-                        </button>
+                            <button class="oe_state_button" type="object" name="action_view_book" icon="fa-book">
+                                <field string="Books" name="book_count" widget="statinfo"/>
+                            </button>
+                        </div>
 
-
-
-                    </div>
                         <group>
-                            <field name="borrower_ids"/>
-                            <field name="borrowername"/>
-
+                            <field name="name"/>
                         </group>
+
                         <notebook>
                             <page string="Book Details">
-                            <!-- you can display child data like code below -->
                                 <field name="book_field_id"/>
                             </page>
                         </notebook>
                     </sheet>
+
                     <div class="oe_chatter">
                         <field name="message_follower_ids"/>
                         <field name="message_ids"/>
@@ -43,7 +40,7 @@
             <field name="model">borrower.details</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="borrowername"/>
+                    <field name="name"/>
                      <field name="book_field_id" widget="many2many_tags"/>
 
                 </tree>

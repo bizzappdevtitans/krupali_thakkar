@@ -23,7 +23,7 @@
                                  <!-- Other content area ... -->
                                     <div>
                                         <strong>
-                                            <field name="bookname"/>
+                                            <field name="name"/>
                                         </strong>
                                     </div>
 
@@ -87,17 +87,15 @@
         <field name="model">book.details</field>
         <field name="arch" type="xml">
             <tree delete="0">
-                <field name="bookname"/>
+                <field name="name"/>
                 <field name="book_type"/>
-                <field name="description"/>
                 <field name="date_published"/>
                 <field name="average_rating"/>
                 <field name="is_available" widget="boolean_toggle"/>
                 <field name="last_borrow_date" optional="show"/>
-                <field name="date_returned"  widget="remaining_days"/>
-                <field name="book_price"/>
+                <field name="rent_price"/>
                 <field name="tag_ids" widget="many2many_tags" optional="show"/>
-                <field name="borrower_field_id" widget="many2many_tags"/>
+                <field name="borrower_ids" widget="many2many_tags"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'available'" decoration-danger="state == 'not_avalible'"/>
                 <field name="color" widget="color_picker" optional="show"/>
                 <field name="priority" widget="priority" optional="show"/>
@@ -134,12 +132,12 @@
 
                     <group name="group_top">
                         <group name="group_left">
-                            <field name="bookname"/>
-                            <field name="book_type"/>
-                            <field name="description" widget="text"/>
+                            <field name="name" placeholder="Enter book name"/>
+                            <field name="book_type" placeholder="select book type"/>
+                            <field name="description" widget="text" placeholder="Enter book description"/>
                             <field name="date_published"/>
-                            <field name="average_rating"/>
-                            <field name="book_price"/>
+                            <field name="average_rating" placeholder="Enter book ratings"/>
+                            <field name="rent_price" placeholder="Enter rent Price of book"/>
                             <field name="active"/>
                             <field name="tag_ids" widget="many2many_tags"/>
                             <field name="progress" widget="percentpie"/>
@@ -149,8 +147,8 @@
                             <field name="is_available" widget="boolean_toggle"/>
                              <field name="last_borrow_date"/>
                              <field name="date_returned"/>
-                             <field name="borrower_field_id" widget="many2many_tags"/>
-                             <field name="number_of_books"/>
+                             <field name="borrower_ids" widget="many2many_tags"/>
+                             <field name="number_of_books" placeholder="Enter number of books"/>
                              <field name="color" widget="color_picker"/>
                              <field name="image" widget="image"/>
                         </group>
@@ -167,14 +165,11 @@
         <field name="model">book.details</field>
         <field name="arch" type="xml">
             <search>
-                <field name="bookname"/>
-                <field name="is_available"/>
+                <field name="name"/>
                 <field name="book_type"/>
                 <field name="date_returned"/>
-                <field name="description"/>
                 <field name="average_rating"/>
                 <field name="date_published"/>
-                <field name="image" widget="image"/>
                 <field name="last_borrow_date"/>
                 <filter name="archived" string="Archived" domain="[('active','=',False)]"/>
                 <filter name="filter_rating" string="Avrage rating" domain="[('average_rating','>','2.5')]"/>
@@ -204,7 +199,7 @@
         <field name="model">book.details</field>
         <field name="arch" type="xml">
             <calendar date_start="last_borrow_date">
-                <field name="bookname" />
+                <field name="name" />
             </calendar>
         </field>
     </record>
@@ -217,7 +212,7 @@
         <field name="arch" type="xml">
             <pivot>
                 <field name="book_type" type="col" />
-                <field name="bookname" />
+                <field name="name" />
                 <field name="last_borrow_date" interval="week" />
                 <field name="average_rating" type="measure" />
             </pivot>

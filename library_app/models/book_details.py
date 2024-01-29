@@ -5,14 +5,14 @@ from odoo.exceptions import ValidationError
 class BookDetails(models.Model):
     _name = "book.details"
     _description = "Information about book"
-    _rec_name = "bookname"
+    _rec_name = "name"
 
     borrower_count = fields.Integer(
         string="count of borrower", compute="count_borrower"
     )
 
-    bookname = fields.Char("Bookname", required=True)
-    is_available = fields.Boolean("Is Available")
+    name = fields.Char(string="name", help="Enter a Book Name", required=True)
+    is_available = fields.Boolean(string="Is Available")
     book_type = fields.Selection(
         [
             ("paper", "Paperback"),
@@ -20,51 +20,67 @@ class BookDetails(models.Model):
             ("electronic", "Electronic"),
             ("other", "Other"),
         ],
-        "Type",
+        string="Type",
+        help="select type of book",
     )
-    number_of_books = fields.Integer("Number of book")
-    date_returned = fields.Date("Return Date")
-    description = fields.Text("Description")
-    average_rating = fields.Float("Average Rating", (3, 2))
-    date_published = fields.Date()
-    image = fields.Binary("Cover")
-    last_borrow_date = fields.Datetime("Last Borrowed On")
+    number_of_books = fields.Integer(
+        string="Number of book", help="Enter a number of books"
+    )
+    date_returned = fields.Date(string="Return Date")
+    description = fields.Text(
+        string="Description", help="Enter a description about book"
+    )
+    average_rating = fields.Float(
+        string="Average Rating", help="Give a ratings to book"
+    )
+    date_published = fields.Date(
+        string="Date of Publish", help="Enter a date of publish"
+    )
+    image = fields.Binary(string="Cover", help="Attach a book cover")
+    last_borrow_date = fields.Datetime(
+        string="Last Borrowed On", help="Enter a last borrow date"
+    )
     active = fields.Boolean(default=True)
-    book_price = fields.Integer("Rent Price")
+    rent_price = fields.Integer(string="Rent Price", help="Enter rent price of book")
     state = fields.Selection(
         [
             ("not_avalible", "Not Available"),
             ("available", "Available"),
         ],
-        "State",
+        string="State",
     )
     progress = fields.Integer(string="Progress", compute="_compute_progress")
-    color = fields.Integer("Color")
+    color = fields.Integer(string="Color")
     priority = fields.Selection(
-        [("0", "Normal"), ("1", "Low"), ("2", "High"), ("3", "Very High")], "Priority"
+        [("0", "Normal"), ("1", "Low"), ("2", "High"), ("3", "Very High")],
+        string="Priority",
     )
 
-    borrower_field_id = fields.Many2many(
-        "borrower.details", "book_borrow_rel", "borrower_id", "book_id", "borrowername"
+    borrower_ids = fields.Many2many(
+        "borrower.details",
+        "book_borrow_rel",
+        "borrower_id",
+        "book_id",
+        string="Borrower Names",
     )
 
     tag_ids = fields.Many2many("book.tags", string="Tags")
 
-    def _action_confirm(self):
-        print("button")
-
-    @api.constrains("book_price")
-    def _check_book_price(self):
+    # check rent price
+    @api.constrains("rent_price")
+    def _check_rent_price(self):
         for records in self:
-            if records.book_price < 0:
+            if records.rent_price < 0:
                 raise ValidationError("book price must be non zero positive number")
 
+    # check numbers of books
     @api.constrains("number_of_books")
     def _check_number_of_books(self):
         for records in self:
             if records.number_of_books < 0:
-                raise ValidationError("Number must not be Nagative")
+                raise ValidationError("Number of books must not be zero Nagative")
 
+    # set the state of the book
     @api.depends("state")
     def _compute_progress(self):
         for records in self:
@@ -76,16 +92,20 @@ class BookDetails(models.Model):
                 progress = 0
             records.progress = progress
 
+    # return book button
     @api.depends("number_of_books")
     def action_return(self):
         self.number_of_books += 1
         self.state = "available"
 
+    # borrow book button
     @api.onchange("number_of_books")
     def action_borrow(self):
         self.number_of_books -= 1
         if self.number_of_books < 1:
             self.state = "not_avalible"
+
+    # view borrower details
 
     def action_view_borrower(self):
         return {
@@ -98,6 +118,8 @@ class BookDetails(models.Model):
             "type": "ir.actions.act_window",
         }
 
+    # count borrowers
+
     def count_borrower(self):
         for records in self:
-            records.borrower_count = len(self.borrower_field_id)
+            records.borrower_count = len(self.borrower_ids)

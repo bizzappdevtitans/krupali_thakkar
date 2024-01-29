@@ -4,11 +4,15 @@
             id = "library_menu"
             name = "Library"
             />
+        <menuitem
+            id="book_menu"
+            name="Books"
+            parent="library_menu"/>
 
         <menuitem
             id = "book_details_menu"
             name = "Book"
-            parent = "library_menu"
+            parent = "book_menu"
             action = "action_book_details"/>
 
         <menuitem
@@ -19,8 +23,8 @@
 
         <menuitem
             id="book_tags"
-            name="BookTag"
-            parent="book_details_menu"
+            name="Tags"
+            parent="book_menu"
             action="action_book_tags"/>
 
     </odoo>

@@ -8,9 +8,9 @@
     "depends": ["base", "mail"],
     "data": [
         "security/ir.model.access.csv",
-        "views/borrower_details_views.xml",
         "views/book_tag_views.xml",
         "views/book_details_views.xml",
+        "views/borrower_details_views.xml",
         "views/library_menu_views.xml",
     ],
     "application": True,

@@ -5,24 +5,23 @@ class BorrowerDetails(models.Model):
     _name = "borrower.details"
     _description = "details of borrower"
     _inherit = ["mail.thread"]
-    _rec_name = "borrowername"
+    _rec_name = "name"
 
-    borrowername = fields.Char("BorrowerName")
-    borrower_ids = fields.Char("Borrower ID")
+    name = fields.Char(string="Name", help="Enter name of borrower", required=True)
 
     book_count = fields.Integer(string="count of book", compute="count_book")
 
     book_field_id = fields.Many2many(
-        "book.details", "book_borrow_rel", "book_id", "borrower_id", "bookname"
+        "book.details", "book_borrow_rel", "book_id", "borrower_id", string="bookname"
     )
 
     def action_view_book(self):
         return {
             "name": ("Books"),
             "res_model": "book.details",
-            "view_mode": "list,form",
+            "view_mode": "tree,form",
             "context": {},
-            "domain": [("borrower_field_id", "=", self.borrowername)],
+            "domain": [("borrower_ids", "=", self.name)],
             "target": "current",
             "type": "ir.actions.act_window",
         }
