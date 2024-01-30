@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class SubjectDetails(models.Model):
@@ -7,6 +7,9 @@ class SubjectDetails(models.Model):
     _rec_name = "name"
 
     name = fields.Char(string="Name", required=True, help="Enter subject name")
+    subject_id = fields.Char(
+        string="Subject ID", required=True, index=True, copy=True, default="new"
+    )
     course_ids = fields.Many2one("course.details", string="course name", required=True)
     teacher_ids = fields.Many2many(
         "teachers.details",
@@ -22,6 +25,8 @@ class SubjectDetails(models.Model):
         "subject_id",
         string="Student Name",
     )
+
+    color = fields.Integer()
 
     exam_ids = fields.One2many("exam.details", "subject_ids", string="Exam Name")
 
@@ -101,3 +106,8 @@ class SubjectDetails(models.Model):
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
+
+    @api.model
+    def create(self, vals):
+        vals["subject_id"] = self.env["ir.sequence"].next_by_code("subjectid.sequence")
+        return super(SubjectDetails, self).create(vals)

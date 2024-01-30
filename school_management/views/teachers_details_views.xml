@@ -8,10 +8,11 @@
             <field name="model">teachers.details</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="teacher_id"/>
                     <field name="name"/>
                     <field name="gender"/>
                     <field name="course_ids"/>
-                    <field name="subject_ids" widget="many2many_tags"/>
+                    <field name="subject_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
                     <field name="phone_number"/>
                     <field name="email"/>
                     <field name="experiance"/>
@@ -28,33 +29,32 @@
                 <form>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-
                             <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
-
                                 <field string="Students" name="student_count" widget="statinfo"/>
-
                             </button>
 
                              <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book" attrs="{'invisible':[('subject_count','==',0)]}">
-
                                 <field string="Subjects" name="subject_count" widget="statinfo"/>
-
                             </button>
 
                         </div>
+
                         <group name="group_top">
 
                             <group name="group_left">
+                                <h2>
+                                    <field name="teacher_id" attrs="{'readonly': True}"/>
+                                </h2>
                                 <field name="name" placeholder="Enter teacher name"/>
                                 <field name="gender" widget="radio"/>
                                 <field name="phone_number" placeholder="Enter phone number"/>
                                 <field name="email" placeholder="Enter email"/>
+                                <field name="date_of_joining"/>
                             </group>
 
                             <group name="group_right">
-
                                 <field name="course_ids"/>
-                                <field name="subject_ids" widget="many2many_tags" domain="[('course_ids', '=', course_ids)]"/>
+                                <field name="subject_ids" widget="many2many_tags" domain="[('course_ids', '=', course_ids)]" options="{'color_field':'color'}"/>
                                 <field name="experiance"/>
                                 <field name="student_ids" widget="many2many_tags" domain="[('course_ids', '=', course_ids)]"/>
                             </group>
@@ -72,15 +72,14 @@
             <field name="model">teachers.details</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="teacher_id"/>
                     <field name="name"/>
-                    <field name="gender"/>
                     <field name="course_ids"/>
                     <field name="subject_ids" widget="many2many_tags"/>
                     <field name="experiance"/>
                     <filter name="group_course" string="By course" context="{'group_by': 'course_ids'}"/>
                     <filter name="filter_male_teacher" string="Male Teacher" domain="[('gender','=','male')]"/>
                     <filter name="filter_female_teacher" string="Female Teacher" domain="[('gender','=','female')]"/>
-                    <filter name="filter_experienced_teachers" string="experianced Teacher" domain="[('experiance','>=','2')]"/>
                 </search>
             </field>
         </record>

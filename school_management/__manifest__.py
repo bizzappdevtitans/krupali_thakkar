@@ -7,6 +7,7 @@
     "version": "15.0.1.0.0",
     "depends": ["base"],
     "data": [
+        "data/ir_sequence_data.xml",
         "security/ir.model.access.csv",
         "views/result_details_views.xml",
         "views/exam_details_views.xml",

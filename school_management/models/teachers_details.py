@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from datetime import date
 import re
 
 
@@ -9,11 +10,15 @@ class TeachersDetails(models.Model):
     _rec_name = "name"
 
     name = fields.Char(string="Name", required=True, help="Enter teacher name")
+    teacher_id = fields.Char(
+        string="Teacher ID", required=True, index=True, copy=False, default="new"
+    )
     gender = fields.Selection(
         [("male", "Male"), ("female", "Female")], string="Gender", required=True
     )
     phone_number = fields.Char(string="Contact Number", required=True)
     email = fields.Char(string="Email ID", required=True)
+    date_of_joining = fields.Date(string="Date of joining")
     course_ids = fields.Many2one("course.details", string="course name", required=True)
     subject_ids = fields.Many2many(
         "subject.details",
@@ -32,7 +37,21 @@ class TeachersDetails(models.Model):
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
-    experiance = fields.Integer(string="Experiance in years")
+    experiance = fields.Integer(
+        string="Experiance in years", compute="_calculate_experiance"
+    )
+
+    # calculate experiance from date of joining
+
+    def _calculate_experiance(self):
+        for records in self:
+            today = date.today()
+            current_year = today.year
+
+            if records.date_of_joining.year < current_year:
+                records.experiance = today.year - records.date_of_joining.year
+            else:
+                records.experiance = 0
 
     # count of students
 
@@ -118,3 +137,10 @@ class TeachersDetails(models.Model):
             )
             if match == None:
                 raise ValidationError("Not a valid E-mail ID")
+
+    # sequence of teacher id
+
+    @api.model
+    def create(self, vals):
+        vals["teacher_id"] = self.env["ir.sequence"].next_by_code("teacherid.sequence")
+        return super(TeachersDetails, self).create(vals)

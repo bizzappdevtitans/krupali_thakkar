@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class CourseDetails(models.Model):
@@ -7,6 +7,9 @@ class CourseDetails(models.Model):
     _rec_name = "name"
 
     name = fields.Char(string="Name", help="Enter a course Name", required=True)
+    course_id = fields.Char(
+        string="Course ID", required=True, index=True, copy=False, default="new"
+    )
     student_ids = fields.One2many(
         "student.details", "course_ids", string="Student Names", required=True
     )
@@ -121,3 +124,10 @@ class CourseDetails(models.Model):
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
+
+    # sequence of course id
+
+    @api.model
+    def create(self, vals):
+        vals["course_id"] = self.env["ir.sequence"].next_by_code("courseid.sequence")
+        return super(CourseDetails, self).create(vals)

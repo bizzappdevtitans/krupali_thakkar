@@ -6,7 +6,7 @@ class ResultDetails(models.Model):
     _description = "Details about the result"
 
     student_name = fields.Char(string="Student Name")
-    student_id = fields.Integer(
+    student_id = fields.Char(
         string="Student ID", required=True, help="Enter student unique id"
     )
     student_course = fields.Char(string="Course")

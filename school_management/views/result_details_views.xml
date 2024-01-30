@@ -11,8 +11,6 @@
                     <field name="student_id"/>
                     <field name="student_name"/>
                     <field name="student_course"/>
-
-
                 </tree>
             </field>
         </record>
@@ -26,6 +24,7 @@
                 <form>
                     <sheet>
                         <group name="group_top">
+
                             <group name="group_left">
                                 <field name="student_id" placeholder="Enter student unique id"/>
                                 <field name="student_name"/>
@@ -34,10 +33,10 @@
                             <group name="group_right">
                                 <field name="student_course"/>
                             </group>
-
                         </group>
+
                         <notebook>
-                                <page string="Marks Details">
+                            <page string="Marks Details">
                                 <field name="exam_name" widget="many2many" domain="[('student_ids', '=', student_name)]">
                                     <tree editable="bottom">
                                         <field name="name"/>
@@ -48,7 +47,6 @@
                                 </field>
                             </page>
                         </notebook>
-
                     </sheet>
                 </form>
             </field>
@@ -77,6 +75,7 @@
             <field name="res_model">result.details</field>
             <field name="view_mode">tree,form</field>
         </record>
+
     </odoo>
 
 

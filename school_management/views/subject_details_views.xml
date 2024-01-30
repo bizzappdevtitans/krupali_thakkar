@@ -8,10 +8,10 @@
             <field name="model">subject.details</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="subject_id"/>
                     <field name="name"/>
                     <field name="course_ids"/>
                     <field name="teacher_ids" widget="many2many_tags"/>
-
                 </tree>
             </field>
         </record>
@@ -24,7 +24,6 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-
                         <div class="oe_button_box" name="button_box">
 
                             <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
@@ -32,16 +31,19 @@
                             </button>
 
                             <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users" attrs="{'invisible':[('teachers_count','==',0)]}">
-
                                 <field string="Teachers" name="teachers_count" widget="statinfo"/>
-
                             </button>
+
                         </div>
 
                         <group>
+                            <h2>
+                                <field name="subject_id" attrs="{'readonly': True}"/>
+                            </h2>
                             <field name="name" placeholder="Enter subject name"/>
                             <field name="course_ids"/>
                             <field name="teacher_ids" domain="[('course_ids', '=', course_ids)]"/>
+                            <field name="color" widget="color_picker"/>
                         </group>
                     </sheet>
                 </form>
@@ -50,11 +52,12 @@
 
 <!--Search View-->
 
-        <record id="subject_details_tree" model="ir.ui.view">
+        <record id="subject_details_search" model="ir.ui.view">
             <field name="name">subject.details.search</field>
             <field name="model">subject.details</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="subject_id"/>
                     <field name="name"/>
                     <field name="course_ids"/>
                     <field name="teacher_ids" widget="many2many_tags"/>

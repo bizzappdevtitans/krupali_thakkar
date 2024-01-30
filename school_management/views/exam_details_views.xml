@@ -11,7 +11,6 @@
                     <field name="name"/>
                     <field name="exam_date"/>
                     <field name="subject_ids"/>
-
                 </tree>
             </field>
         </record>
@@ -26,9 +25,11 @@
             <form>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                            <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
-                                <field string="Students" name="student_count" widget="statinfo"/>
-                            </button>
+
+                        <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
+                            <field string="Students" name="student_count" widget="statinfo"/>
+                        </button>
+
                     </div>
                     <group>
                         <field name="name" placeholder="Enter exam name"/>
@@ -37,7 +38,6 @@
                         <field name="course_ids"/>
                         <field name="subject_ids" domain="[('course_ids', '=', course_ids)]"/>
                         <field name="student_ids" domain="[('subject_ids', '=', subject_ids)]" widget="many2many_tags"/>
-                        <field name="exam_marks"/>
                     </group>
                 </sheet>
             </form>
@@ -53,11 +53,8 @@
                 <search>
                     <field name="name"/>
                     <field name="exam_date"/>
-
                     <field name="course_ids"/>
                     <field name="subject_ids"/>
-
-
                 </search>
             </field>
         </record>
@@ -84,4 +81,5 @@
             <field name="res_model">exam.details</field>
             <field name="view_mode">tree,form,calendar</field>
         </record>
+
     </odoo>

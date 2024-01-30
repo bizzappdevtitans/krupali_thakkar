@@ -10,8 +10,8 @@ class StudentDetails(models.Model):
     _rec_name = "name"
 
     name = fields.Char(string="Name", required=True, help="Enter student name")
-    student_id = fields.Integer(
-        string="student ID", required=True, help="Enter student unique id"
+    student_id = fields.Char(
+        string="student ID", required=True, index=True, copy=False, default="new"
     )
     gender = fields.Selection(
         [("male", "Male"), ("female", "Female")], string="Gender", required=True
@@ -45,6 +45,7 @@ class StudentDetails(models.Model):
         "student_id",
         string="Exam Name",
     )
+
     reult_name = fields.One2many("result.details", "student_name", string="result")
 
     teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
@@ -59,7 +60,7 @@ class StudentDetails(models.Model):
             current_year = today.year
 
             if (
-                records.birth_date.year > current_year - 100
+                records.birth_date.year > current_year - 50
                 and records.birth_date.year < current_year - 10
             ):
                 records.age = today.year - records.birth_date.year
@@ -196,3 +197,10 @@ class StudentDetails(models.Model):
             )
             if match == None:
                 raise ValidationError("Not a valid E-mail ID")
+
+    # sequence of student id
+
+    @api.model
+    def create(self, vals):
+        vals["student_id"] = self.env["ir.sequence"].next_by_code("studentid.sequence")
+        return super(StudentDetails, self).create(vals)

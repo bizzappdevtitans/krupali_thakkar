@@ -14,8 +14,8 @@
                     <field name="birth_date"/>
                     <field name="age"/>
                     <field name="phone_number" widget="phone"/>
-                    <field name="course_ids"/>
                     <field name="email" widget="email"/>
+                    <field name="course_ids"/>
                 </tree>
             </field>
         </record>
@@ -28,7 +28,6 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-
                     <div class="oe_button_box" name="button_box">
 
                         <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users" attrs="{'invisible':[('teachers_count','==',0)]}">
@@ -40,18 +39,16 @@
                         </button>
 
                         <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book" attrs="{'invisible':[('subject_count','==',0)]}">
-
                             <field string="Subjects" name="subject_count" widget="statinfo"/>
-
                         </button>
+
                     </div>
 
                     <group name="group_top">
 
                         <group name="group_left">
-
                             <h2>
-                                <field name="student_id"/>
+                                <field name="student_id" attrs="{'readonly': True}"/>
                             </h2>
 
                             <field name="name" placeholder="Enter student name"/>
@@ -63,15 +60,11 @@
                         </group>
 
                         <group name="group_right">
-
-
                             <field name="image" widget="image" class="oe_avatar" placeholder="upload student Image"/>
-
                             <field name="phone_number" widget="phone" placeholder="Enter phone number"/>
-                             <field name="email" widget="email" placeholder="Enter email"/>
-
+                            <field name="email" widget="email" placeholder="Enter email"/>
                             <field name="course_ids"/>
-                            <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" widget="many2many_tags"/>
+                            <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" widget="many2many_tags" options="{'color_field':'color'}"/>
                         </group>
                     </group>
                 </sheet>
@@ -86,9 +79,8 @@
             <field name="model">student.details</field>
             <field name="arch" type="xml">
                 <search>
-
+                    <field name="student_id"/>
                     <field name="name"/>
-                    <field name="gender"/>
                     <field name="birth_date"/>
                     <field name="age"/>
                     <field name="teacher_ids" widget="many2many_tags"/>
