@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
     <odoo>
+
         <menuitem
             id = "school_menu"
             name = "School"
             />
+
         <menuitem
             id = "Course_menu"
             name = "Course"
             parent="school_menu"
             />
+
         <menuitem
             id = "exam_menu"
             name = "Exams"

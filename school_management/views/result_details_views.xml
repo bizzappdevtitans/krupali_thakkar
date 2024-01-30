@@ -2,6 +2,7 @@
     <odoo>
 
 <!--Tree View-->
+
         <record id="result_details_tree" model="ir.ui.view">
             <field name="name">result.details.tree</field>
             <field name="model">result.details</field>
@@ -17,6 +18,7 @@
         </record>
 
 <!--Form View-->
+
         <record id="result_details_form" model="ir.ui.view">
             <field name="name">result.details.form</field>
             <field name="model">result.details</field>
@@ -25,7 +27,7 @@
                     <sheet>
                         <group name="group_top">
                             <group name="group_left">
-                                <field name="student_id"/>
+                                <field name="student_id" placeholder="Enter student unique id"/>
                                 <field name="student_name"/>
                             </group>
 
@@ -39,7 +41,7 @@
                                 <field name="exam_name" widget="many2many" domain="[('student_ids', '=', student_name)]">
                                     <tree editable="bottom">
                                         <field name="name"/>
-                                        <field name="course_field_id"/>
+                                        <field name="course_ids"/>
                                         <field name="subject_ids"/>
                                         <field name="exam_marks" sum="total of marks string='Total'" />
                                     </tree>

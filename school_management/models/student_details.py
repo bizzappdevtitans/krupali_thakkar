@@ -7,28 +7,30 @@ import re
 class StudentDetails(models.Model):
     _name = "student.details"
     _description = "Details about the students"
-    _rec_name = "student_name"
+    _rec_name = "name"
 
-    student_name = fields.Char("Student Name", required=True)
-    student_id = fields.Integer("Student ID")
-    gender = fields.Selection(
-        [("male", "Male"), ("female", "Female")], "Gender", required=True
+    name = fields.Char(string="Name", required=True, help="Enter student name")
+    student_id = fields.Integer(
+        string="student ID", required=True, help="Enter student unique id"
     )
-    birth_date = fields.Date("Date Of birth")
-    student_age = fields.Integer(string="Age", compute="_compute_age")
-    father_name = fields.Char("Father Name")
-    mother_name = fields.Char("Mother Name")
-    student_phone = fields.Char("Phone Number")
-    student_image = fields.Binary()
-    student_email = fields.Char("Email")
+    gender = fields.Selection(
+        [("male", "Male"), ("female", "Female")], string="Gender", required=True
+    )
+    birth_date = fields.Date(string="Date Of birth")
+    age = fields.Integer(string="Age", compute="_compute_age")
+    father_name = fields.Char(string="Father Name")
+    mother_name = fields.Char(string="Mother Name")
+    phone_number = fields.Char(string="Phone Number")
+    image = fields.Binary()
+    email = fields.Char(string="Email")
     teacher_ids = fields.Many2many(
         "teachers.details",
         "student_teacher_rel",
         "teacher_id",
         "student_id",
-        "Teacher Name",
+        string="Teacher Name",
     )
-    course_field_id = fields.Many2one("course.details", "Course Name", required=True)
+    course_ids = fields.Many2one("course.details", string="Course Name", required=True)
     subject_ids = fields.Many2many(
         "subject.details",
         "subject_student_rel",
@@ -41,13 +43,15 @@ class StudentDetails(models.Model):
         "exam_student_rel",
         "exam_id",
         "student_id",
-        "Exam Name",
+        string="Exam Name",
     )
-    reult_name = fields.One2many("result.details", "student_name", "result")
+    reult_name = fields.One2many("result.details", "student_name", string="result")
 
     teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
     exam_count = fields.Integer("Exams", compute="_count_of_exams")
+
+    # calculate age form the date of birth
 
     def _compute_age(self):
         for records in self:
@@ -58,27 +62,35 @@ class StudentDetails(models.Model):
                 records.birth_date.year > current_year - 100
                 and records.birth_date.year < current_year - 10
             ):
-                records.student_age = today.year - records.birth_date.year
+                records.age = today.year - records.birth_date.year
             else:
                 raise ValidationError("Enter valid birthdate")
+
+    # count of teachers
 
     def _count_of_teachers(self):
         for record in self:
             record.teachers_count = self.env["teachers.details"].search_count(
-                [("student_ids", "=", self.student_name)]
+                [("student_ids", "=", self.name)]
             )
+
+    # count of subjects
 
     def _count_of_subjects(self):
         for record in self:
             record.subject_count = self.env["subject.details"].search_count(
-                [("student_ids", "=", self.student_name)]
+                [("student_ids", "=", self.name)]
             )
+
+    # count of exams
 
     def _count_of_exams(self):
         for record in self:
             record.exam_count = self.env["exam.details"].search_count(
-                [("student_ids", "=", self.student_name)]
+                [("student_ids", "=", self.name)]
             )
+
+    # set student id as unique
 
     _sql_constraints = [
         (
@@ -87,6 +99,8 @@ class StudentDetails(models.Model):
             "Student id Must be unique",
         ),
     ]
+
+    # view teachers details
 
     def action_view_teacher(self):
         if self.teachers_count == 1:
@@ -105,10 +119,12 @@ class StudentDetails(models.Model):
                 "res_model": "teachers.details",
                 "view_mode": "tree,form",
                 "context": {},
-                "domain": [("student_ids", "=", self.student_name)],
+                "domain": [("student_ids", "=", self.name)],
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
+
+    # view subject details
 
     def action_view_subjects(self):
         if self.subject_count == 1:
@@ -128,10 +144,12 @@ class StudentDetails(models.Model):
                 "res_model": "subject.details",
                 "view_mode": "tree,form",
                 "context": {},
-                "domain": [("student_ids", "=", self.student_name)],
+                "domain": [("student_ids", "=", self.name)],
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
+
+    # view exam details
 
     def action_view_exam(self):
         if self.exam_count == 1:
@@ -150,7 +168,7 @@ class StudentDetails(models.Model):
                 "res_model": "exam.details",
                 "view_mode": "tree,form",
                 "context": {},
-                "domain": [("student_ids", "=", self.student_name)],
+                "domain": [("student_ids", "=", self.name)],
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
@@ -158,19 +176,23 @@ class StudentDetails(models.Model):
     def action_view_result(self):
         pass
 
-    @api.onchange("student_phone")
+    # phone number validation
+
+    @api.onchange("phone_number")
     def validate_phone(self):
-        if self.student_phone:
-            match = re.match("^[0-9]\d{9}$", self.student_phone)
+        if self.phone_number:
+            match = re.match("^[0-9]\d{9}$", self.phone_number)
             if match == None:
                 raise ValidationError("Enter Valid 10 digit Phone Number")
 
-    @api.onchange("student_email")
+    # email validation
+
+    @api.onchange("email")
     def validate_mail(self):
-        if self.student_email:
+        if self.email:
             match = re.match(
                 "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$",
-                self.student_email,
+                self.email,
             )
             if match == None:
                 raise ValidationError("Not a valid E-mail ID")

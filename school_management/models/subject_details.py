@@ -4,49 +4,57 @@ from odoo import models, fields
 class SubjectDetails(models.Model):
     _name = "subject.details"
     _description = "Details about the subjects"
-    _rec_name = "subject_name"
+    _rec_name = "name"
 
-    subject_name = fields.Char("Subject Name", required=True)
-    course_field_id = fields.Many2one("course.details", "course name", required=True)
+    name = fields.Char(string="Name", required=True, help="Enter subject name")
+    course_ids = fields.Many2one("course.details", string="course name", required=True)
     teacher_ids = fields.Many2many(
         "teachers.details",
         "subject_teacher_rel",
         "teacher_id",
         "subject_id",
-        "Teacher Name",
+        string="Teacher Name",
     )
     student_ids = fields.Many2many(
         "student.details",
         "subject_student_rel",
         "student_id",
         "subject_id",
-        "Student Name",
+        string="Student Name",
     )
 
-    exam_ids = fields.One2many("exam.details", "subject_ids", "Exam Name")
+    exam_ids = fields.One2many("exam.details", "subject_ids", string="Exam Name")
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
     teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
 
+    # set subject name as unique
+
     _sql_constraints = [
         (
             "unique_subject",
-            "unique(subject_name)",
+            "unique(name)",
             "Subject Name Must be unique",
         ),
     ]
 
+    # count of students
+
     def _count_of_students(self):
         for record in self:
             record.student_count = self.env["student.details"].search_count(
-                [("subject_ids", "=", self.subject_name)]
+                [("subject_ids", "=", self.name)]
             )
+
+    # count of teachers
 
     def _count_of_teachers(self):
         for record in self:
             record.teachers_count = self.env["teachers.details"].search_count(
-                [("subject_ids", "=", self.subject_name)]
+                [("subject_ids", "=", self.name)]
             )
+
+    # view student details
 
     def action_view_student(self):
         if self.student_count == 1:
@@ -65,10 +73,12 @@ class SubjectDetails(models.Model):
                 "res_model": "student.details",
                 "view_mode": "tree,form",
                 "context": {},
-                "domain": [("subject_ids", "=", self.subject_name)],
+                "domain": [("subject_ids", "=", self.name)],
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
+
+    # view teacher details
 
     def action_view_teacher(self):
         if self.teachers_count == 1:
@@ -87,7 +97,7 @@ class SubjectDetails(models.Model):
                 "res_model": "teachers.details",
                 "view_mode": "tree,form",
                 "context": {},
-                "domain": [("subject_ids", "=", self.subject_name)],
+                "domain": [("subject_ids", "=", self.name)],
                 "target": "current",
                 "type": "ir.actions.act_window",
             }

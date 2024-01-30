@@ -8,8 +8,8 @@
             <field name="model">subject.details</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="subject_name"/>
-                    <field name="course_field_id"/>
+                    <field name="name"/>
+                    <field name="course_ids"/>
                     <field name="teacher_ids" widget="many2many_tags"/>
 
                 </tree>
@@ -24,19 +24,24 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
+
                         <div class="oe_button_box" name="button_box">
+
                             <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
                                 <field string="Students" name="student_count" widget="statinfo"/>
                             </button>
 
                             <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users" attrs="{'invisible':[('teachers_count','==',0)]}">
+
                                 <field string="Teachers" name="teachers_count" widget="statinfo"/>
+
                             </button>
                         </div>
+
                         <group>
-                            <field name="subject_name"/>
-                            <field name="course_field_id"/>
-                            <field name="teacher_ids" domain="[('course_field_id', '=', course_field_id)]"/>
+                            <field name="name" placeholder="Enter subject name"/>
+                            <field name="course_ids"/>
+                            <field name="teacher_ids" domain="[('course_ids', '=', course_ids)]"/>
                         </group>
                     </sheet>
                 </form>
@@ -50,23 +55,19 @@
             <field name="model">subject.details</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="subject_name"/>
-                    <field name="course_field_id"/>
+                    <field name="name"/>
+                    <field name="course_ids"/>
                     <field name="teacher_ids" widget="many2many_tags"/>
-
-
-
                 </search>
             </field>
         </record>
 
-
-
 <!--Action View-->
+
         <record id="action_subject_details" model="ir.actions.act_window">
             <field name="name">subjects.details</field>
             <field name="res_model">subject.details</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        </odoo>
+    </odoo>

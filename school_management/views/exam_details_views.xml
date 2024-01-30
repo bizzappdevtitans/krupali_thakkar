@@ -2,6 +2,7 @@
     <odoo>
 
 <!--Tree View-->
+
         <record id="exam_details_tree" model="ir.ui.view">
             <field name="name">exam.details.tree</field>
             <field name="model">exam.details</field>
@@ -30,11 +31,11 @@
                             </button>
                     </div>
                     <group>
-                        <field name="name"/>
+                        <field name="name" placeholder="Enter exam name"/>
                         <field name="exam_date" options="{'datepicker':{'minDate': 'now'}}"/>
-                        <field name="duration"/>
-                        <field name="course_field_id"/>
-                        <field name="subject_ids" domain="[('course_field_id', '=', course_field_id)]"/>
+                        <field name="duration" placeholder="Enter exam duration"/>
+                        <field name="course_ids"/>
+                        <field name="subject_ids" domain="[('course_ids', '=', course_ids)]"/>
                         <field name="student_ids" domain="[('subject_ids', '=', subject_ids)]" widget="many2many_tags"/>
                         <field name="exam_marks"/>
                     </group>
@@ -44,6 +45,7 @@
     </record>
 
 <!--Search View-->
+
         <record id="exam_details_search" model="ir.ui.view">
             <field name="name">exam.details.search</field>
             <field name="model">exam.details</field>
@@ -52,7 +54,7 @@
                     <field name="name"/>
                     <field name="exam_date"/>
 
-                    <field name="course_field_id"/>
+                    <field name="course_ids"/>
                     <field name="subject_ids"/>
 
 
@@ -76,6 +78,7 @@
 
 
 <!--Action View-->
+
         <record id="action_exam_details" model="ir.actions.act_window">
             <field name="name">exams.details</field>
             <field name="res_model">exam.details</field>

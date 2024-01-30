@@ -9,15 +9,13 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="student_id"/>
-                    <field name="student_name"/>
+                    <field name="name"/>
                     <field name="gender"/>
                     <field name="birth_date"/>
-                    <field name="student_age"/>
-                    <field name="father_name"/>
-                    <field name="mother_name"/>
-                    <field name="student_phone" widget="phone"/>
-                    <field name="course_field_id"/>
-                    <field name="student_email" widget="email"/>
+                    <field name="age"/>
+                    <field name="phone_number" widget="phone"/>
+                    <field name="course_ids"/>
+                    <field name="email" widget="email"/>
                 </tree>
             </field>
         </record>
@@ -32,6 +30,7 @@
                 <sheet>
 
                     <div class="oe_button_box" name="button_box">
+
                         <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users" attrs="{'invisible':[('teachers_count','==',0)]}">
                             <field string="Teachers" name="teachers_count" widget="statinfo"/>
                         </button>
@@ -41,41 +40,40 @@
                         </button>
 
                         <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book" attrs="{'invisible':[('subject_count','==',0)]}">
+
                             <field string="Subjects" name="subject_count" widget="statinfo"/>
+
                         </button>
                     </div>
 
                     <group name="group_top">
 
                         <group name="group_left">
+
                             <h2>
                                 <field name="student_id"/>
                             </h2>
-                            <field name="student_name"/>
-                            <field name="gender" widget="radio"/>
-                            <field name="birth_date"/>
-                            <field name="student_age"/>
-                            <field name="father_name"/>
-                            <field name="mother_name"/>
 
+                            <field name="name" placeholder="Enter student name"/>
+                            <field name="gender" widget="radio"/>
+                            <field name="birth_date" placeholder="Enter student birth date"/>
+                            <field name="age"/>
+                            <field name="father_name" placeholder="Enter father name"/>
+                            <field name="mother_name" placeholder="Enter mother name"/>
                         </group>
 
                         <group name="group_right">
 
 
-                            <field name="student_image" widget="image" class="oe_avatar"/>
+                            <field name="image" widget="image" class="oe_avatar" placeholder="upload student Image"/>
 
-                            <field name="student_phone" widget="phone"/>
-                             <field name="student_email" widget="email"/>
+                            <field name="phone_number" widget="phone" placeholder="Enter phone number"/>
+                             <field name="email" widget="email" placeholder="Enter email"/>
 
-                            <field name="course_field_id"/>
-                            <field name="subject_ids" domain="[('course_field_id', '=', course_field_id)]" widget="many2many_tags"/>
-
-
-
+                            <field name="course_ids"/>
+                            <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" widget="many2many_tags"/>
                         </group>
                     </group>
-
                 </sheet>
             </form>
         </field>
@@ -88,15 +86,15 @@
             <field name="model">student.details</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="student_name"/>
+
+                    <field name="name"/>
                     <field name="gender"/>
                     <field name="birth_date"/>
-                    <field name="student_age"/>
-                    <field name="student_phone"/>
+                    <field name="age"/>
                     <field name="teacher_ids" widget="many2many_tags"/>
                     <field name="subject_ids" widget="many2many_tags"/>
-                    <field name="course_field_id"/>
-                    <filter name="group_course" string="By course" context="{'group_by': 'course_field_id'}"/>
+                    <field name="course_ids"/>
+                    <filter name="group_course" string="By course" context="{'group_by': 'course_ids'}"/>
                     <filter name="filter_male_students" string="Male Student" domain="[('gender','=','male')]"/>
                     <filter name="filter_female_students" string="Female Student" domain="[('gender','=','female')]"/>
                 </search>

@@ -6,11 +6,13 @@ class ExamDetails(models.Model):
     _description = "Details about the exam"
     _rec_name = "name"
 
-    name = fields.Char(string="Name",required=True)
-    exam_date = fields.Date(string="Date Of Exam")
+    name = fields.Char(string="Name", required=True, help="Enter a exam name")
+    exam_date = fields.Date(string="Date Of Exam", help="enter date of exam")
     duration = fields.Char(string="Duration")
-    course_field_id = fields.Many2one("course.details", string="Course Name", required=True)
-    subject_ids = fields.Many2one("subject.details", string="Subject Name", required=True)
+    course_ids = fields.Many2one("course.details", string="Course Name", required=True)
+    subject_ids = fields.Many2one(
+        "subject.details", string="Subject Name", required=True
+    )
     student_ids = fields.Many2many(
         "student.details",
         "exam_student_rel",
@@ -22,11 +24,15 @@ class ExamDetails(models.Model):
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
 
+    # count of students
+
     def _count_of_students(self):
         for record in self:
             record.student_count = self.env["student.details"].search_count(
                 [("exam_ids", "=", self.name)]
             )
+
+    # view student details
 
     def action_view_student(self):
         if self.student_count == 1:

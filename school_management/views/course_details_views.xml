@@ -37,8 +37,8 @@
                             </button>
                         </div>
                     <group>
-                        <field name="name"/>
-                        <field name="subject_ids" widget="many2many_tags"  domain="[('course_field_id', '=', name)]"/>
+                        <field name="name" placeholder="Enter course name"/>
+                        <field name="subject_ids" widget="many2many_tags"  domain="[('course_ids', '=', name)]"/>
                         <field name="teacher_ids" widget="many2many_tags"/>
 
                     </group>
@@ -64,6 +64,7 @@
     </record>
 
 <!--Action View-->
+
         <record id="action_course_details" model="ir.actions.act_window">
             <field name="name">courses.details</field>
             <field name="res_model">course.details</field>
