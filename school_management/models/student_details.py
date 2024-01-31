@@ -1,6 +1,6 @@
 from datetime import date
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError,UserError
 import re
 
 
@@ -204,3 +204,16 @@ class StudentDetails(models.Model):
     def create(self, vals):
         vals["student_id"] = self.env["ir.sequence"].next_by_code("studentid.sequence")
         return super(StudentDetails, self).create(vals)
+
+    @api.onchange("name")
+    def update_father_name(self):
+        for record in self:
+            if record.name == "jainam":
+                record.write({"father_name": "Kamleshbhai"})
+
+
+    def unlink(self):
+        for record in self:
+            if record.exam_ids:
+                raise UserError(('You cannot Delete this record'))
+        return super(StudentDetails, self).unlink()

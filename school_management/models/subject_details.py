@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 
 
 class SubjectDetails(models.Model):
@@ -47,17 +48,19 @@ class SubjectDetails(models.Model):
 
     def _count_of_students(self):
         for record in self:
-            record.student_count = self.env["student.details"].search_count(
+            students = self.env["student.details"].search(
                 [("subject_ids", "=", self.name)]
             )
+            record.student_count = len(students)
 
     # count of teachers
 
     def _count_of_teachers(self):
         for record in self:
-            record.teachers_count = self.env["teachers.details"].search_count(
+            teachers = self.env["teachers.details"].search_read(
                 [("subject_ids", "=", self.name)]
             )
+            record.teachers_count = len(teachers)
 
     # view student details
 
@@ -107,7 +110,15 @@ class SubjectDetails(models.Model):
                 "type": "ir.actions.act_window",
             }
 
+    # create subject id
+
     @api.model
     def create(self, vals):
         vals["subject_id"] = self.env["ir.sequence"].next_by_code("subjectid.sequence")
         return super(SubjectDetails, self).create(vals)
+
+    def unlink(self):
+        for record in self:
+            if record.student_ids:
+                raise UserError(("You cannot Delete this record"))
+        return super(SubjectDetails, self).unlink()

@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class ExamDetails(models.Model):
@@ -7,6 +7,9 @@ class ExamDetails(models.Model):
     _rec_name = "name"
 
     name = fields.Char(string="Name", required=True, help="Enter a exam name")
+    exam_id = fields.Char(
+        string="Exam ID", required=True, index=True, copy=False, default="new"
+    )
     exam_date = fields.Date(string="Date Of Exam", help="enter date of exam")
     duration = fields.Char(string="Duration")
     course_ids = fields.Many2one("course.details", string="Course Name", required=True)
@@ -20,6 +23,7 @@ class ExamDetails(models.Model):
         "exam_id",
         string="Student Name",
     )
+    exam_type = fields.Char(string="exam Type")
     exam_marks = fields.Integer(string="Marks")
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
@@ -55,3 +59,20 @@ class ExamDetails(models.Model):
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
+
+    # write type of exAM
+
+    @api.onchange("duration")
+    def write_exam_type(self):
+        for records in self:
+            if records.duration == "2 hours":
+                records.write({"exam_type": "Intenal"})
+            elif records.duration == "3 hours":
+                records.write({"exam_type": "External"})
+            else:
+                records.write({"exam_type": None})
+
+    @api.model
+    def create(self, vals):
+        vals["exam_id"] = self.env["ir.sequence"].next_by_code("examid.sequence")
+        return super(ExamDetails, self).create(vals)

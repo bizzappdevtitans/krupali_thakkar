@@ -8,6 +8,7 @@
             <field name="model">exam.details</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="exam_id"/>
                     <field name="name"/>
                     <field name="exam_date"/>
                     <field name="subject_ids"/>
@@ -32,9 +33,11 @@
 
                     </div>
                     <group>
+                        <field name="exam_id"/>
                         <field name="name" placeholder="Enter exam name"/>
                         <field name="exam_date" options="{'datepicker':{'minDate': 'now'}}"/>
                         <field name="duration" placeholder="Enter exam duration"/>
+                        <field name="exam_type"/>
                         <field name="course_ids"/>
                         <field name="subject_ids" domain="[('course_ids', '=', course_ids)]"/>
                         <field name="student_ids" domain="[('subject_ids', '=', subject_ids)]" widget="many2many_tags"/>
@@ -51,6 +54,7 @@
             <field name="model">exam.details</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="exam_id"/>
                     <field name="name"/>
                     <field name="exam_date"/>
                     <field name="course_ids"/>

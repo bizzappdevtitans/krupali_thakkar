@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 from datetime import date
 import re
 
@@ -144,3 +144,17 @@ class TeachersDetails(models.Model):
     def create(self, vals):
         vals["teacher_id"] = self.env["ir.sequence"].next_by_code("teacherid.sequence")
         return super(TeachersDetails, self).create(vals)
+
+    # update email id using write method
+
+    @api.onchange("name")
+    def write_email(self):
+        for records in self:
+            if records.name == "yash":
+                records.write({"email": "yash123@gmail.com"})
+
+    def unlink(self):
+        for record in self:
+            if record.subject_ids:
+                raise UserError(("You cannot Delete this record"))
+        return super(TeachersDetails, self).unlink()
