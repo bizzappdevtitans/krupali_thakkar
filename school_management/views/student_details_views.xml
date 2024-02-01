@@ -8,14 +8,14 @@
             <field name="model">student.details</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="student_id"/>
-                    <field name="name"/>
-                    <field name="gender"/>
-                    <field name="birth_date"/>
-                    <field name="age"/>
+                    <field name="student_id"  decoration-bf="1"/>
+                    <field name="name" decoration-primary = "1" decoration-bf="1"/>
+                    <field name="gender" decoration-muted = "1" decoration-bf="1"/>
+                    <field name="birth_date" decoration-primary = "1" decoration-bf="1"/>
+                    <field name="age" decoration-muted = "1" decoration-bf="1"/>
                     <field name="phone_number" widget="phone"/>
                     <field name="email" widget="email"/>
-                    <field name="course_ids"/>
+                    <field name="course_ids" decoration-bf = "1"/>
                 </tree>
             </field>
         </record>
@@ -48,12 +48,12 @@
 
                         <group name="group_left">
                             <h2>
-                                <field name="student_id" attrs="{'readonly': True}"/>
+                                <field name="student_id" attrs="{'readonly': True}" decoration-info="1"/>
                             </h2>
 
                             <field name="name" placeholder="Enter student name"/>
                             <field name="gender" widget="radio"/>
-                            <field name="birth_date" placeholder="Enter student birth date"/>
+                            <field name="birth_date" placeholder="Select Your Birth Date"/>
                             <field name="age"/>
                             <field name="father_name" placeholder="Enter father name"/>
                             <field name="mother_name" placeholder="Enter mother name"/>
@@ -63,8 +63,8 @@
                             <field name="image" widget="image" class="oe_avatar" placeholder="upload student Image"/>
                             <field name="phone_number" widget="phone" placeholder="Enter phone number"/>
                             <field name="email" widget="email" placeholder="Enter email"/>
-                            <field name="course_ids"/>
-                            <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" widget="many2many_tags" options="{'color_field':'color'}"/>
+                            <field name="course_ids" placeholder="Select Course"/>
+                            <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" widget="many2many_tags" options="{'color_field':'color'}" placeholder="Select Subjects"/>
                         </group>
                     </group>
                 </sheet>

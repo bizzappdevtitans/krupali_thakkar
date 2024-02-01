@@ -7,9 +7,9 @@ import re
 class TeachersDetails(models.Model):
     _name = "teachers.details"
     _description = "Information about the teachers"
-    _rec_name = "name"
+    _rec_name = "teacher_name"
 
-    name = fields.Char(string="Name", required=True, help="Enter teacher name")
+    teacher_name = fields.Char(string="Name", required=True, help="Enter teacher name")
     teacher_id = fields.Char(
         string="Teacher ID", required=True, index=True, copy=False, default="new"
     )
@@ -19,19 +19,21 @@ class TeachersDetails(models.Model):
     phone_number = fields.Char(string="Contact Number", required=True)
     email = fields.Char(string="Email ID", required=True)
     date_of_joining = fields.Date(string="Date of joining")
-    course_ids = fields.Many2one("course.details", string="course name", required=True)
+    course_ids = fields.Many2one(
+        comodel_name="course.details", string="course name", required=True
+    )
     subject_ids = fields.Many2many(
-        "subject.details",
-        "subject_teacher_rel",
-        "subject_id",
-        "teacher_id",
+        comodel_name="subject.details",
+        relation="subject_teacher_rel",
+        column1="subject_id",
+        column2="teacher_id",
         string="Subject Name",
     )
     student_ids = fields.Many2many(
-        "student.details",
-        "student_teacher_rel",
-        "student_id",
-        "teacher_id",
+        comodel_name="student.details",
+        relation="student_teacher_rel",
+        column1="student_id",
+        column2="teacher_id",
         string="Student Name",
     )
 
@@ -58,7 +60,7 @@ class TeachersDetails(models.Model):
     def _count_of_students(self):
         for record in self:
             record.student_count = self.env["student.details"].search_count(
-                [("teacher_ids", "=", self.name)]
+                [("teacher_ids", "=", self.teacher_name)]
             )
 
     # count of subjects
@@ -66,7 +68,7 @@ class TeachersDetails(models.Model):
     def _count_of_subjects(self):
         for record in self:
             record.subject_count = self.env["subject.details"].search_count(
-                [("teacher_ids", "=", self.name)]
+                [("teacher_ids", "=", self.teacher_name)]
             )
 
     # view student details
@@ -88,7 +90,7 @@ class TeachersDetails(models.Model):
                 "res_model": "student.details",
                 "view_mode": "tree,form",
                 "context": {},
-                "domain": [("teacher_ids", "=", self.name)],
+                "domain": [("teacher_ids", "=", self.teacher_name)],
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
@@ -112,7 +114,7 @@ class TeachersDetails(models.Model):
                 "res_model": "subject.details",
                 "view_mode": "tree,form",
                 "context": {},
-                "domain": [("teacher_ids", "=", self.name)],
+                "domain": [("teacher_ids", "=", self.teacher_name)],
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
@@ -153,8 +155,38 @@ class TeachersDetails(models.Model):
             if records.name == "yash":
                 records.write({"email": "yash123@gmail.com"})
 
+    # restrict for delete record using ORM unlink method
+
     def unlink(self):
         for record in self:
             if record.subject_ids:
                 raise UserError(("You cannot Delete this record"))
         return super(TeachersDetails, self).unlink()
+
+    # ORM name get method for display name for many2many tags
+
+    def name_get(self):
+        res = []
+        for records in self:
+            res.append(
+                (records.id, "%s, %s" % (records.teacher_id, records.teacher_name))
+            )
+        return res
+
+    # ORM name search method for serch student name using multiple field values
+
+    @api.model
+    def _name_search(
+        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
+    ):
+        args = args or []
+        domain = []
+        if name:
+            domain = [
+                "|",
+                "|",
+                ("teacher_name", operator, name),
+                ("phone_number", operator, name),
+                ("email", operator, name),
+            ]
+        return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)

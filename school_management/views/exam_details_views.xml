@@ -3,19 +3,20 @@
 
 <!--Tree View-->
 
-        <record id="exam_details_tree" model="ir.ui.view">
-            <field name="name">exam.details.tree</field>
+      <record id="exam_details_tree" model="ir.ui.view">
+            <field name="name">exam.details.search</field>
             <field name="model">exam.details</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="exam_id"/>
-                    <field name="name"/>
-                    <field name="exam_date"/>
+                    <field name="exam_id" decoration-bf="1"/>
+                    <field name="name" decoration-primary="1"/>
+                    <field name="exam_date" decoration-info="1"/>
+                    <field name="course_ids" decoration-bf="1"/>
                     <field name="subject_ids"/>
                 </tree>
+
             </field>
         </record>
-
 
 <!--Form View-->
 
@@ -33,14 +34,17 @@
 
                     </div>
                     <group>
-                        <field name="exam_id"/>
-                        <field name="name" placeholder="Enter exam name"/>
-                        <field name="exam_date" options="{'datepicker':{'minDate': 'now'}}"/>
+                        <h2>
+                            <field name="exam_id" attrs="{'readonly': True}" decoration-warning="1"/>
+                        </h2>
+
+                        <field name="name" placeholder="Enter exam name" decoration-bf="1" decoration-if="1"/>
+                        <field name="exam_date" options="{'datepicker':{'minDate': 'now'}}" placeholder="Choose exam date"/>
                         <field name="duration" placeholder="Enter exam duration"/>
                         <field name="exam_type"/>
-                        <field name="course_ids"/>
-                        <field name="subject_ids" domain="[('course_ids', '=', course_ids)]"/>
-                        <field name="student_ids" domain="[('subject_ids', '=', subject_ids)]" widget="many2many_tags"/>
+                        <field name="course_ids" placeholder="Select Course"/>
+                        <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" placeholder="Select Subjects"/>
+                        <field name="student_ids" domain="[('subject_ids', '=', subject_ids)]" widget="many2many_tags" placeholder="Select Students"/>
                     </group>
                 </sheet>
             </form>
@@ -49,8 +53,8 @@
 
 <!--Search View-->
 
-        <record id="exam_details_search" model="ir.ui.view">
-            <field name="name">exam.details.search</field>
+         <record id="exam_details_search" model="ir.ui.view">
+            <field name="name">exam.details.tree</field>
             <field name="model">exam.details</field>
             <field name="arch" type="xml">
                 <search>
@@ -62,7 +66,6 @@
                 </search>
             </field>
         </record>
-
 
 <!--Calender view -->
 

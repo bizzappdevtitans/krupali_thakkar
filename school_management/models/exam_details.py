@@ -14,13 +14,13 @@ class ExamDetails(models.Model):
     duration = fields.Char(string="Duration")
     course_ids = fields.Many2one("course.details", string="Course Name", required=True)
     subject_ids = fields.Many2one(
-        "subject.details", string="Subject Name", required=True
+        comodel_name="subject.details", string="Subject Name", required=True
     )
     student_ids = fields.Many2many(
-        "student.details",
-        "exam_student_rel",
-        "student_id",
-        "exam_id",
+        comodel_name="student.details",
+        relation="exam_student_rel",
+        column1="student_id",
+        column2="exam_id",
         string="Student Name",
     )
     exam_type = fields.Char(string="exam Type")
@@ -72,7 +72,33 @@ class ExamDetails(models.Model):
             else:
                 records.write({"exam_type": None})
 
+    # for geneating exam ids
+
     @api.model
     def create(self, vals):
         vals["exam_id"] = self.env["ir.sequence"].next_by_code("examid.sequence")
         return super(ExamDetails, self).create(vals)
+
+    # ORM name get method for display name for many2many tags
+
+    def name_get(self):
+        res = []
+        for records in self:
+            res.append((records.id, "%s, %s" % (records.exam_id, records.name)))
+        return res
+
+    # ORM name search method for serch exam name using multiple field values
+
+    @api.model
+    def _name_search(
+        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
+    ):
+        args = args or []
+        domain = []
+        if name:
+            domain = [
+                "|",
+                ("name", operator, name),
+                ("duration", operator, name),
+            ]
+        return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)

@@ -11,15 +11,22 @@ class CourseDetails(models.Model):
         string="Course ID", required=True, index=True, copy=False, default="new"
     )
     student_ids = fields.One2many(
-        "student.details", "course_ids", string="Student Names", required=True
+        comodel_name="student.details",
+        inverse_name="course_ids",
+        string="Student Names",
+        required=True,
     )
     subject_ids = fields.One2many(
-        "subject.details", "course_ids", string="Subject Name"
+        comodel_name="subject.details", inverse_name="course_ids", string="Subject Name"
     )
     teacher_ids = fields.One2many(
-        "teachers.details", "course_ids", string="Teacher Name"
+        comodel_name="teachers.details",
+        inverse_name="course_ids",
+        string="Teacher Name",
     )
-    exam_ids = fields.One2many("exam.details", "course_ids", string="Exam Name")
+    exam_ids = fields.One2many(
+        comodel_name="exam.details", inverse_name="course_ids", string="Exam Name"
+    )
 
     student_count = fields.Integer(string="Students", compute="_count_of_students")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
@@ -125,9 +132,25 @@ class CourseDetails(models.Model):
                 "type": "ir.actions.act_window",
             }
 
-    # sequence of course id
+    # sequence of student id
 
     @api.model
     def create(self, vals):
         vals["course_id"] = self.env["ir.sequence"].next_by_code("courseid.sequence")
         return super(CourseDetails, self).create(vals)
+
+    # ORM name search method for search course name using multiple fields values
+
+    @api.model
+    def _name_search(
+        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
+    ):
+        args = args or []
+        domain = []
+        if name:
+            domain = [
+                "|",
+                ("name", operator, name),
+                ("course_id", operator, name),
+            ]
+        return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)

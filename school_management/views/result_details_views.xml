@@ -8,9 +8,9 @@
             <field name="model">result.details</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="student_id"/>
-                    <field name="student_name"/>
-                    <field name="student_course"/>
+                    <field name="student_id" decoration-bf="1"/>
+                    <field name="student_name" decoration-primary="1" decoration-bf="1"/>
+                    <field name="student_course" decoration-bf="1"/>
                 </tree>
             </field>
         </record>

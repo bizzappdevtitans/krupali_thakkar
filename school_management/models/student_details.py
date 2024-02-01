@@ -1,6 +1,6 @@
 from datetime import date
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError,UserError
+from odoo.exceptions import ValidationError, UserError
 import re
 
 
@@ -24,29 +24,33 @@ class StudentDetails(models.Model):
     image = fields.Binary()
     email = fields.Char(string="Email")
     teacher_ids = fields.Many2many(
-        "teachers.details",
-        "student_teacher_rel",
-        "teacher_id",
-        "student_id",
+        comodel_name="teachers.details",
+        relation="student_teacher_rel",
+        column1="teacher_id",
+        column2="student_id",
         string="Teacher Name",
     )
-    course_ids = fields.Many2one("course.details", string="Course Name", required=True)
+    course_ids = fields.Many2one(
+        comodel_name="course.details", string="Course Name", required=True
+    )
     subject_ids = fields.Many2many(
-        "subject.details",
-        "subject_student_rel",
-        "subject_id",
-        "student_id",
-        "Subject Name",
+        comodel_name="subject.details",
+        relation="subject_student_rel",
+        column1="subject_id",
+        column2="student_id",
+        string="Subject Name",
     )
     exam_ids = fields.Many2many(
-        "exam.details",
-        "exam_student_rel",
-        "exam_id",
-        "student_id",
+        comodel_name="exam.details",
+        relation="exam_student_rel",
+        column1="exam_id",
+        column2="student_id",
         string="Exam Name",
     )
 
-    reult_name = fields.One2many("result.details", "student_name", string="result")
+    result_name = fields.One2many(
+        comodel_name="result.details", inverse_name="student_name", string="result"
+    )
 
     teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
@@ -205,15 +209,49 @@ class StudentDetails(models.Model):
         vals["student_id"] = self.env["ir.sequence"].next_by_code("studentid.sequence")
         return super(StudentDetails, self).create(vals)
 
+    # update name using write method
+
     @api.onchange("name")
     def update_father_name(self):
         for record in self:
             if record.name == "jainam":
                 record.write({"father_name": "Kamleshbhai"})
 
+    # restrict for delete record using ORM unlink method
 
     def unlink(self):
         for record in self:
             if record.exam_ids:
-                raise UserError(('You cannot Delete this record'))
+                raise UserError(("You cannot Delete this record"))
         return super(StudentDetails, self).unlink()
+
+    # ORM name get method for display name for many2many tags
+
+    def name_get(self):
+        res = []
+        for records in self:
+            res.append((records.id, "%s, %s" % (records.student_id, records.name)))
+        return res
+
+    # ORM name search method for serch student name using multiple field values
+
+    @api.model
+    def _name_search(
+        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
+    ):
+        args = args or []
+        domain = []
+        if name:
+            domain = [
+                "|",
+                "|",
+                ("name", operator, name),
+                ("phone_number", operator, name),
+                ("father_name", operator, name),
+            ]
+        return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)
+
+    def read(self, fields=None, load='_classic_read'):
+        self.check_access_rule('read')
+        return super(StudentDetails, self).read(fields=fields, load=load)
+

@@ -22,3 +22,10 @@ class ResultDetails(models.Model):
 
         self.student_name = view_student_id.name
         self.student_course = view_student_id.course_ids.name
+
+    # ORM write method for update field value
+
+    def write(self, vals):
+        if "student_course" in vals and vals["student_course"]:
+            vals["student_course"] = vals["student_course"].upper()
+            return super(ResultDetails, self).write(vals)
