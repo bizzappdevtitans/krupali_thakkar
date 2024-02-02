@@ -56,5 +56,10 @@
             parent = "exam_menu"
             action = "action_result_details"/>
 
+        <menuitem
+            id="library_details_menu"
+            name="Library"
+            parent="school_menu"
+            action="action_library_details"/>
 
     </odoo>

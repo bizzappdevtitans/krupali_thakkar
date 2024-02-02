@@ -16,6 +16,7 @@
                     <field name="phone_number" widget="phone"/>
                     <field name="email" widget="email"/>
                     <field name="course_ids" decoration-bf = "1"/>
+                    <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
                 </tree>
             </field>
         </record>
@@ -65,6 +66,7 @@
                             <field name="email" widget="email" placeholder="Enter email"/>
                             <field name="course_ids" placeholder="Select Course"/>
                             <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" widget="many2many_tags" options="{'color_field':'color'}" placeholder="Select Subjects"/>
+                            <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
                         </group>
                     </group>
                 </sheet>

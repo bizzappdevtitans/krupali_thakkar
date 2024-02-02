@@ -12,6 +12,7 @@
                 <field name="name" decoration-bf="1"/>
                 <field name="subject_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
                 <field name="teacher_ids" widget="many2many_tags"/>
+                <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
             </tree>
         </field>
     </record>
@@ -37,6 +38,10 @@
                                 <field string="Teachers" name="teachers_count" widget="statinfo"/>
                             </button>
 
+                            <button class="oe_state_button" type="object" name="action_view_book" icon="fa-book" attrs="{'invisible':[('book_count','==',0)]}">
+                                <field string="Books" name="book_count" widget="statinfo"/>
+                            </button>
+
                         </div>
                     <group>
                         <h2>
@@ -45,6 +50,7 @@
                         <field name="name" placeholder="Enter course name"/>
                         <field name="subject_ids" widget="many2many_tags"  domain="[('course_ids', '=', name)]" options="{'color_field':'color'}" placeholder="Select Subjects"/>
                         <field name="teacher_ids" widget="many2many_tags" domain="[('course_ids', '=', name)]" placeholder="Select teachers"/>
+                        <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
                     </group>
                 </sheet>
             </form>

@@ -40,6 +40,13 @@ class StudentDetails(models.Model):
         column2="student_id",
         string="Subject Name",
     )
+    book_ids = fields.Many2many(
+        comodel_name="library.details",
+        relation="book_student_rel",
+        column1="book_id",
+        column2="student_id",
+        string="Book Name",
+    )
     exam_ids = fields.Many2many(
         comodel_name="exam.details",
         relation="exam_student_rel",
@@ -251,7 +258,6 @@ class StudentDetails(models.Model):
             ]
         return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)
 
-    def read(self, fields=None, load='_classic_read'):
-        self.check_access_rule('read')
+    def read(self, fields=None, load="_classic_read"):
+        self.check_access_rule("read")
         return super(StudentDetails, self).read(fields=fields, load=load)
-

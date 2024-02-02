@@ -24,6 +24,11 @@ class CourseDetails(models.Model):
         inverse_name="course_ids",
         string="Teacher Name",
     )
+    book_ids = fields.One2many(
+        comodel_name="library.details",
+        inverse_name="course_id",
+        string="Book Name",
+    )
     exam_ids = fields.One2many(
         comodel_name="exam.details", inverse_name="course_ids", string="Exam Name"
     )
@@ -31,6 +36,7 @@ class CourseDetails(models.Model):
     student_count = fields.Integer(string="Students", compute="_count_of_students")
     subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
     teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
+    book_count = fields.Integer(string="Books", compute="_count_of_books")
 
     # for unique course Name
 
@@ -61,6 +67,13 @@ class CourseDetails(models.Model):
         for record in self:
             record.teachers_count = self.env["teachers.details"].search_count(
                 [("course_ids", "=", self.name)]
+            )
+
+    # count books
+    def _count_of_books(self):
+        for record in self:
+            record.book_count = self.env["library.details"].search_count(
+                [("course_id", "=", self.name)]
             )
 
     # view student details
@@ -128,6 +141,29 @@ class CourseDetails(models.Model):
                 "res_model": "teachers.details",
                 "view_mode": "tree,form",
                 "domain": [("course_ids", "=", self.name)],
+                "target": "current",
+                "type": "ir.actions.act_window",
+            }
+
+    # view book details
+
+    def action_view_book(self):
+        if self.book_count == 1:
+            return {
+                "name": "Books",
+                "type": "ir.actions.act_window",
+                "view_mode": "form",
+                "view_type": "form",
+                "res_model": "library.details",
+                "res_id": self.book_ids.id,
+                "target": "new",
+            }
+        else:
+            return {
+                "name": "Books",
+                "res_model": "library.details",
+                "view_mode": "tree,form",
+                "domain": [("course_id", "=", self.name)],
                 "target": "current",
                 "type": "ir.actions.act_window",
             }
