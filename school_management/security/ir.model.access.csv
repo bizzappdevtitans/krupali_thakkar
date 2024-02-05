@@ -6,3 +6,4 @@ school_management.access_course_details,access_course_details,school_management.
 school_management.access_exam_details,access_exam_details,school_management.model_exam_details,base.group_user,1,1,1,1
 school_management.access_result_details,access_result_details,school_management.model_result_details,base.group_user,1,1,1,1
 school_management.access_library_details,access_library_details,school_management.model_library_details,base.group_user,1,1,1,1
+school_management.access_activity_details,access_activity_details,school_management.model_activity_details,base.group_user,1,1,1,1

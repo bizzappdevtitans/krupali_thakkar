@@ -167,14 +167,42 @@
             </field>
         </record>
 
+<!--Graph View-->
 
+        <record id="library_details_graph" model="ir.ui.view">
+            <field name="name">library.details.graph</field>
+            <field name="model">library.details</field>
+            <field name="arch" type="xml">
+                <graph string="Books" type="bar">
+                    <field name="average_rating"/>
+                    <field name="course_id" operator="*"/>
+                </graph>
+            </field>
+        </record>
+
+<!--Search View-->
+
+        <record id="library_details_search" model="ir.ui.view">
+            <field name="name">library.details.search</field>
+            <field name="model">library.details</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="book_id"/>
+                    <field name="book_name"/>
+                    <field name="average_rating"/>
+                    <field name="course_id"/>
+                    <field name="state"/>
+                    <field name="student_ids"/>
+                </search>
+            </field>
+        </record>
 
 <!--Action Menu-->
 
         <record id="action_library_details" model="ir.actions.act_window">
             <field name="name">library.detail</field>
             <field name="res_model">library.details</field>
-            <field name="view_mode">kanban,tree,form,pivot</field>
+            <field name="view_mode">kanban,tree,form,pivot,graph</field>
         </record>
 
     </odoo>

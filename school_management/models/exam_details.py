@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from dateutil.relativedelta import relativedelta
 
 
 class ExamDetails(models.Model):
@@ -11,6 +12,7 @@ class ExamDetails(models.Model):
         string="Exam ID", required=True, index=True, copy=False, default="new"
     )
     exam_date = fields.Date(string="Date Of Exam", help="enter date of exam")
+    confirm_date = fields.Date(string="Confirm Date")
     duration = fields.Char(string="Duration")
     course_ids = fields.Many2one("course.details", string="Course Name", required=True)
     subject_ids = fields.Many2one(
@@ -102,3 +104,12 @@ class ExamDetails(models.Model):
                 ("duration", operator, name),
             ]
         return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)
+
+# get confirm date using system parameters
+
+    @api.onchange("exam_date")
+    def get_confirm_date(self):
+        days = self.env["ir.config_parameter"].get_param(
+            "school_management_cancel_days"
+        )
+        self.confirm_date = self.exam_date + relativedelta(days=int(days))

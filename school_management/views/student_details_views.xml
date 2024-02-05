@@ -17,6 +17,7 @@
                     <field name="email" widget="email"/>
                     <field name="course_ids" decoration-bf = "1"/>
                     <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
+                    <field name="activity_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
                 </tree>
             </field>
         </record>
@@ -58,21 +59,22 @@
                             <field name="age"/>
                             <field name="father_name" placeholder="Enter father name"/>
                             <field name="mother_name" placeholder="Enter mother name"/>
+                            <field name="course_ids" placeholder="Select Course"/>
                         </group>
 
                         <group name="group_right">
                             <field name="image" widget="image" class="oe_avatar" placeholder="upload student Image"/>
                             <field name="phone_number" widget="phone" placeholder="Enter phone number"/>
                             <field name="email" widget="email" placeholder="Enter email"/>
-                            <field name="course_ids" placeholder="Select Course"/>
+                            <field name="activity_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
                             <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" widget="many2many_tags" options="{'color_field':'color'}" placeholder="Select Subjects"/>
-                            <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
+                            <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}" domain="[('course_id', '=', course_ids)]"/>
                         </group>
                     </group>
                 </sheet>
             </form>
         </field>
-    </record>
+    </record>s
 
 <!--Search View-->
 

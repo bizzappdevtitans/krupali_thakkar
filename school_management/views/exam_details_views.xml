@@ -39,7 +39,8 @@
                         </h2>
 
                         <field name="name" placeholder="Enter exam name" decoration-bf="1" decoration-if="1"/>
-                        <field name="exam_date" options="{'datepicker':{'minDate': 'now'}}" placeholder="Choose exam date"/>
+                        <field name="exam_date" placeholder="Choose exam date"/>
+                        <field name="confirm_date"/>
                         <field name="duration" placeholder="Enter exam duration"/>
                         <field name="exam_type"/>
                         <field name="course_ids" placeholder="Select Course"/>

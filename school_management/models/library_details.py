@@ -54,6 +54,8 @@ class LibraryDetails(models.Model):
             self.state = "not_avalible"
             self.is_available = False
 
+
+
     # check numbers of books
     @api.constrains("number_of_books")
     def _check_number_of_books(self):

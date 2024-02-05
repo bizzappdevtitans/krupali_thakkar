@@ -9,6 +9,8 @@
     "data": [
         "data/ir_sequence_data.xml",
         "security/ir.model.access.csv",
+        "views/res_config_settings.xml",
+        "views/activity_details_views.xml",
         "views/library_details_views.xml",
         "views/result_details_views.xml",
         "views/exam_details_views.xml",

@@ -54,6 +54,13 @@ class StudentDetails(models.Model):
         column2="student_id",
         string="Exam Name",
     )
+    activity_ids = fields.Many2many(
+        comodel_name="activity.details",
+        relation="student_activity_rel",
+        column1="activity_id",
+        column2="student_id",
+        string="Activities"
+    )
 
     result_name = fields.One2many(
         comodel_name="result.details", inverse_name="student_name", string="result"
