@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+        <menuitem id="hostel_menu" name="Hostel Management" />
+
+        <menuitem
+        id="boyshostel_details_menu"
+        name="Boys Hostel"
+        parent="hostel_menu"
+        action="action_boys_hostel_details"
+    />
+        </odoo>
