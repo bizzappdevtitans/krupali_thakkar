@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+hostel_app.access_boyshostel_details,access_boyshostel_details,hostel_app.model_boyshostel_details,base.group_user,1,1,1,1
