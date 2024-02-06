@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+
+<!--Tree View-->
+
+        <record id="result_details_tree" model="ir.ui.view">
+            <field name="name">result.details.tree</field>
+            <field name="model">result.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="student_id" decoration-bf="1"/>
+                    <field name="student_name" decoration-primary="1" decoration-bf="1"/>
+                    <field name="student_course" decoration-bf="1"/>
+                </tree>
+            </field>
+        </record>
+
+<!--Form View-->
+
+        <record id="result_details_form" model="ir.ui.view">
+            <field name="name">result.details.form</field>
+            <field name="model">result.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group name="group_top">
+
+                            <group name="group_left">
+                                <field name="student_id" placeholder="Enter student unique id"/>
+                                <field name="student_name"/>
+                            </group>
+
+                            <group name="group_right">
+                                <field name="student_course"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Marks Details">
+                                <field name="exam_name" widget="many2many" domain="[('student_ids', '=', student_name)]">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="course_ids"/>
+                                        <field name="subject_ids"/>
+                                        <field name="exam_marks" sum="total of marks string='Total'" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+<!--Search View-->
+
+        <record id="result_details_search" model="ir.ui.view">
+            <field name="name">result.details.search</field>
+            <field name="model">result.details</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="student_id"/>
+                    <field name="student_name"/>
+                    <field name="student_course"/>
+                    <filter name="group_course" string="By course" context="{'group_by': 'student_course'}"/>
+                </search>
+            </field>
+        </record>
+
+
+<!--Action View-->
+
+        <record id="action_result_details" model="ir.actions.act_window">
+            <field name="name">results.details</field>
+            <field name="res_model">result.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </odoo>
+
+
+
+
+
+

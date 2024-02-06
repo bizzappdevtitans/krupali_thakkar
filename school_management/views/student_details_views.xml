@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+
+<!--Tree View-->
+
+    <record id="student_details_tree" model="ir.ui.view">
+            <field name="name">student.details.tree</field>
+            <field name="model">student.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="student_id"  decoration-bf="1"/>
+                    <field name="name" decoration-primary = "1" decoration-bf="1"/>
+                    <field name="gender" decoration-muted = "1" decoration-bf="1"/>
+                    <field name="birth_date" decoration-primary = "1" decoration-bf="1"/>
+                    <field name="age" decoration-muted = "1" decoration-bf="1"/>
+                    <field name="phone_number" widget="phone"/>
+                    <field name="email" widget="email"/>
+                    <field name="course_ids" decoration-bf = "1"/>
+                    <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
+                    <field name="activity_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
+                </tree>
+            </field>
+        </record>
+
+<!--Form View-->
+
+    <record id="student_details_form" model="ir.ui.view">
+        <field name="name">student.details.form</field>
+        <field name="model">student.details</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+
+                        <button class="oe_state_button" type="object" name="action_view_teacher" icon="fa-users" attrs="{'invisible':[('teachers_count','==',0)]}">
+                            <field string="Teachers" name="teachers_count" widget="statinfo"/>
+                        </button>
+
+                         <button class="oe_state_button" type="object" name="action_view_exam" icon="fa-book" attrs="{'invisible':[('exam_count','==',0)]}">
+                            <field string="Exams" name="exam_count" widget="statinfo"/>
+                        </button>
+
+                        <button class="oe_state_button" type="object" name="action_view_subjects" icon="fa-book" attrs="{'invisible':[('subject_count','==',0)]}">
+                            <field string="Subjects" name="subject_count" widget="statinfo"/>
+                        </button>
+
+                    </div>
+
+                    <group name="group_top">
+
+                        <group name="group_left">
+                            <h2>
+                                <field name="student_id" attrs="{'readonly': True}" decoration-info="1"/>
+                            </h2>
+
+                            <field name="name" placeholder="Enter student name"/>
+                            <field name="gender" widget="radio"/>
+                            <field name="birth_date" placeholder="Select Your Birth Date"/>
+                            <field name="age"/>
+                            <field name="father_name" placeholder="Enter father name"/>
+                            <field name="mother_name" placeholder="Enter mother name"/>
+                            <field name="course_ids" placeholder="Select Course"/>
+                        </group>
+
+                        <group name="group_right">
+                            <field name="image" widget="image" class="oe_avatar" placeholder="upload student Image"/>
+                            <field name="phone_number" widget="phone" placeholder="Enter phone number"/>
+                            <field name="email" widget="email" placeholder="Enter email"/>
+                            <field name="activity_ids" widget="many2many_tags" options="{'color_field':'color'}"/>
+                            <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" widget="many2many_tags" options="{'color_field':'color'}" placeholder="Select Subjects"/>
+                            <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}" domain="[('course_id', '=', course_ids)]"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>s
+
+<!--Search View-->
+
+    <record id="student_details_search" model="ir.ui.view">
+            <field name="name">student.details.search</field>
+            <field name="model">student.details</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="student_id"/>
+                    <field name="name"/>
+                    <field name="birth_date"/>
+                    <field name="age"/>
+                    <field name="teacher_ids" widget="many2many_tags"/>
+                    <field name="subject_ids" widget="many2many_tags"/>
+                    <field name="course_ids"/>
+                    <filter name="group_course" string="By course" context="{'group_by': 'course_ids'}"/>
+                    <filter name="filter_male_students" string="Male Student" domain="[('gender','=','male')]"/>
+                    <filter name="filter_female_students" string="Female Student" domain="[('gender','=','female')]"/>
+                </search>
+            </field>
+        </record>
+
+
+<!--Action View-->
+
+        <record id="action_student_details" model="ir.actions.act_window">
+            <field name="name">students.details</field>
+            <field name="res_model">student.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </odoo>
