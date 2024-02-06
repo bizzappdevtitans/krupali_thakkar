@@ -14,13 +14,51 @@
 
                             <div class="row mt16 o_settings_container" id="school_setting">
                                 <div class="cpl-12 col-lg-6 o_setting_box">
+
                                     <div class="o_setting_left_pane"/>
+
                                     <div class="o_setting_right_pane">
+
                                         <span class="o_form_label">Before Date</span>
+
                                         <div class="text-muted content-group mt16">
                                             <span>Send an Alert</span>
                                             <field name="cancel_days" class="text-center oe_inline"/>
                                             <span>Days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt16 o_settings_container" id="school_setting">
+                                <div class="cpl-12 col-lg-6 o_setting_box">
+
+                                    <div class="o_setting_left_pane"/>
+
+                                    <div class="o_setting_right_pane">
+                                        <span class="o_form_label">After Days</span>
+
+                                        <div class="text-muted content-group mt16">
+                                            <span>Send an Alert</span>
+                                            <field name="return_days" class="text-center oe_inline"/>
+                                            <span>Days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt16 o_settings_container" id="school_setting">
+                                <div class="cpl-12 col-lg-6 o_setting_box">
+
+                                    <div class="o_setting_left_pane"/>
+                                    <div class="o_setting_right_pane">
+
+                                        <span class="o_form_label">After Months</span>
+
+                                        <div class="text-muted content-group mt16">
+                                            <span>Send an Alert</span>
+                                            <field name="course_months" class="text-center oe_inline"/>
+                                            <span>Months</span>
                                         </div>
                                     </div>
                                 </div>

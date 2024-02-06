@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from dateutil.relativedelta import relativedelta
 
 
 class CourseDetails(models.Model):
@@ -10,6 +11,8 @@ class CourseDetails(models.Model):
     course_id = fields.Char(
         string="Course ID", required=True, index=True, copy=False, default="new"
     )
+    start_date = fields.Date(string="Start Date")
+    end_date = fields.Date(string="End Date")
     student_ids = fields.One2many(
         comodel_name="student.details",
         inverse_name="course_ids",
@@ -190,3 +193,10 @@ class CourseDetails(models.Model):
                 ("course_id", operator, name),
             ]
         return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)
+
+    @api.onchange("start_date")
+    def get_end_date(self):
+        months=self.env["ir.config_parameter"].get_param("school_management_course_months")
+        self.end_date=self.start_date+relativedelta(months=int(months))
+
+

@@ -48,6 +48,8 @@
                             <field name="course_id" attrs="{'readonly': True}" decoration-success="1"/>
                         </h2>
                         <field name="name" placeholder="Enter course name"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
                         <field name="subject_ids" widget="many2many_tags"  domain="[('course_ids', '=', name)]" options="{'color_field':'color'}" placeholder="Select Subjects"/>
                         <field name="teacher_ids" widget="many2many_tags" domain="[('course_ids', '=', name)]" placeholder="Select teachers"/>
                         <field name="book_ids" widget="many2many_tags" options="{'color_field':'color'}"/>

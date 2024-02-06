@@ -39,3 +39,10 @@ class ActivityDetails(models.Model):
                 ("activity_id", operator, name),
             ]
         return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)
+
+    def name_get(self):
+        res =[]
+        for records in self:
+            res.append((records.id, "%s,%s" % (records.activity_id, records.name)))
+        return res
+

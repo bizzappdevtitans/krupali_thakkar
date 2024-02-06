@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError, UserError
+from dateutil.relativedelta import relativedelta
 
 
 class LibraryDetails(models.Model):
@@ -53,8 +54,6 @@ class LibraryDetails(models.Model):
         if self.number_of_book < 1:
             self.state = "not_avalible"
             self.is_available = False
-
-
 
     # check numbers of books
     @api.constrains("number_of_books")
@@ -121,3 +120,10 @@ class LibraryDetails(models.Model):
         for records in self:
             res.append((records.id, "%s,%s" % (records.book_id, records.book_name)))
         return res
+
+    @api.onchange("borrow_date")
+    def get_return_date(self):
+        days = self.env["ir.config_parameter"].get_param(
+            "school_management_book_return_days"
+        )
+        self.date_returned = self.borrow_date + relativedelta(days=int(days))
