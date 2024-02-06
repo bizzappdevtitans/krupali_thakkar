@@ -86,7 +86,8 @@
         <field name="name">book.details.tree</field>
         <field name="model">book.details</field>
         <field name="arch" type="xml">
-            <tree delete="0">
+            <tree>
+                <field name="book_id"/>
                 <field name="name"/>
                 <field name="book_type"/>
                 <field name="date_published"/>
@@ -132,6 +133,7 @@
 
                     <group name="group_top">
                         <group name="group_left">
+                            <field name="book_id"/>
                             <field name="name" placeholder="Enter book name"/>
                             <field name="book_type" placeholder="select book type"/>
                             <field name="description" widget="text" placeholder="Enter book description"/>

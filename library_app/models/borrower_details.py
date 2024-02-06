@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class BorrowerDetails(models.Model):
@@ -6,6 +6,10 @@ class BorrowerDetails(models.Model):
     _description = "details of borrower"
     _inherit = ["mail.thread"]
     _rec_name = "name"
+
+    borrower_id = fields.Char(
+        string="borrower ID", copy=False, index=True, default="new", required=True
+    )
 
     name = fields.Char(string="Name", help="Enter name of borrower", required=True)
 
@@ -29,3 +33,10 @@ class BorrowerDetails(models.Model):
     def count_book(self):
         for records in self:
             records.book_count = len(self.book_field_id)
+
+    @api.model
+    def create(self, vals):
+        vals["borrower_id"] = self.env["ir.sequence"].next_by_code(
+            "borrowerid.sequence"
+        )
+        return super(BorrowerDetails,self).create(vals)

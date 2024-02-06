@@ -7,6 +7,10 @@ class BookDetails(models.Model):
     _description = "Information about book"
     _rec_name = "name"
 
+    book_id = fields.Char(
+        string="Book ID", required=True, copy=True, index=True, default="new"
+    )
+
     borrower_count = fields.Integer(
         string="count of borrower", compute="count_borrower"
     )
@@ -123,3 +127,8 @@ class BookDetails(models.Model):
     def count_borrower(self):
         for records in self:
             records.borrower_count = len(self.borrower_ids)
+
+    @api.model
+    def create(self, vals):
+        vals["book_id"] = self.env["ir.sequence"].next_by_code("bookid.sequence")
+        return super(BookDetails, self).create(vals)

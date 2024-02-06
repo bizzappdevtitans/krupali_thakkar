@@ -15,6 +15,7 @@
                         </div>
 
                         <group>
+                            <field name="borrower_id"/>
                             <field name="name"/>
                         </group>
 
@@ -40,6 +41,7 @@
             <field name="model">borrower.details</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="borrower_id"/>
                     <field name="name"/>
                      <field name="book_field_id" widget="many2many_tags"/>
 
