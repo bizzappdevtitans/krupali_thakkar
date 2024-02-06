@@ -1,6 +1,7 @@
-from odoo import models, fields, api
-from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
+
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
 
 
 class LibraryDetails(models.Model):
@@ -11,8 +12,8 @@ class LibraryDetails(models.Model):
     book_id = fields.Char(
         string="Book ID", required=True, index=True, copy=False, default="new"
     )
-    book_name = fields.Char("Book Name")
-    is_available = fields.Boolean(string="Is Available")
+    book_name = fields.Char("book_name")
+    is_available = fields.Boolean(string="is_available")
     date_returned = fields.Date(string="Return Date")
     borrow_date = fields.Datetime(
         string="Last Borrowed On", help="Enter a last borrow date"
@@ -22,13 +23,13 @@ class LibraryDetails(models.Model):
             ("not_avalible", "Not Available"),
             ("available", "Available"),
         ],
-        string="State",
+        string="state",
     )
     number_of_book = fields.Integer(string="Number of books")
-    color = fields.Integer(string="Color")
+    color = fields.Integer(string="color")
     image = fields.Binary(string="Cover", help="Attach a book cover")
     average_rating = fields.Float(
-        string="Average Rating", help="Give a ratings to book"
+        string="average_rating", help="Give a ratings to book"
     )
     course_id = fields.Many2one(
         comodel_name="course.details", string="Course Name", required=True
@@ -40,7 +41,9 @@ class LibraryDetails(models.Model):
         column2="book_id",
         string="Student Name",
     )
-    student_count = fields.Integer(string="Students", compute="_count_of_students")
+    student_count = fields.Integer(
+        string="Students", compute="_compute_count_of_students"
+    )
 
     @api.depends("number_of_book")
     def action_return(self):
@@ -60,11 +63,11 @@ class LibraryDetails(models.Model):
     def _check_number_of_books(self):
         for records in self:
             if records.number_of_books < 0:
-                raise ValidationError("Number of books must not be zero Nagative")
+                raise ValidationError(_("Number of books must not be zero Nagative"))
 
     # count of students
 
-    def _count_of_students(self):
+    def _compute_count_of_students(self):
         for records in self:
             records.student_count = self.env["student.details"].search_count(
                 [("book_ids", "=", self.book_name)]
@@ -82,7 +85,7 @@ class LibraryDetails(models.Model):
                 "target": "new",
             }
         else:
-            {
+            return {
                 "name": "Students",
                 "res_model": "student.details",
                 "view_mode": "tree,form",
@@ -111,7 +114,7 @@ class LibraryDetails(models.Model):
     def unlink(self):
         for record in self:
             if record.student_ids:
-                raise UserError(("You cannot Delete this record"))
+                raise UserError(_("You cannot Delete this record"))
             return super(LibraryDetails, self).unlink()
 
     @api.model
@@ -120,6 +123,8 @@ class LibraryDetails(models.Model):
         for records in self:
             res.append((records.id, "%s,%s" % (records.book_id, records.book_name)))
         return res
+
+    # get return date by system parameters
 
     @api.onchange("borrow_date")
     def get_return_date(self):

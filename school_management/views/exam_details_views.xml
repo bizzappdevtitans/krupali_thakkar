@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-    <odoo>
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
 
 <!--Tree View-->
 
@@ -8,11 +8,11 @@
             <field name="model">exam.details</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="exam_id" decoration-bf="1"/>
-                    <field name="name" decoration-primary="1"/>
-                    <field name="exam_date" decoration-info="1"/>
-                    <field name="course_ids" decoration-bf="1"/>
-                    <field name="subject_ids"/>
+                    <field name="exam_id" decoration-bf="1" />
+                    <field name="name" decoration-primary="1" />
+                    <field name="exam_date" decoration-info="1" />
+                    <field name="course_ids" decoration-bf="1" />
+                    <field name="subject_ids" />
                 </tree>
 
             </field>
@@ -28,24 +28,51 @@
                 <sheet>
                     <div class="oe_button_box" name="button_box">
 
-                        <button class="oe_state_button" type="object" name="action_view_student" icon="fa-users" attrs="{'invisible':[('student_count','==',0)]}">
-                            <field string="Students" name="student_count" widget="statinfo"/>
+                        <button
+                            class="oe_state_button"
+                            type="object"
+                            name="action_view_student"
+                            icon="fa-users"
+                            attrs="{'invisible':[('student_count','==',0)]}"
+                        >
+                            <field
+                                string="Students"
+                                name="student_count"
+                                widget="statinfo"
+                            />
                         </button>
 
                     </div>
                     <group>
                         <h2>
-                            <field name="exam_id" attrs="{'readonly': True}" decoration-warning="1"/>
+                            <field
+                                name="exam_id"
+                                attrs="{'readonly': True}"
+                                decoration-warning="1"
+                            />
                         </h2>
 
-                        <field name="name" placeholder="Enter exam name" decoration-bf="1" decoration-if="1"/>
-                        <field name="exam_date" placeholder="Choose exam date"/>
-                        <field name="confirm_date"/>
-                        <field name="duration" placeholder="Enter exam duration"/>
-                        <field name="exam_type"/>
-                        <field name="course_ids" placeholder="Select Course"/>
-                        <field name="subject_ids" domain="[('course_ids', '=', course_ids)]" placeholder="Select Subjects"/>
-                        <field name="student_ids" domain="[('subject_ids', '=', subject_ids)]" widget="many2many_tags" placeholder="Select Students"/>
+                        <field
+                            name="name"
+                            placeholder="Enter exam name"
+                            decoration-bf="1"
+                            decoration-if="1"
+                        />
+                        <field name="exam_date" placeholder="Choose exam date" />
+                        <field name="duration" placeholder="Enter exam duration" />
+                        <field name="exam_type" />
+                        <field name="course_ids" placeholder="Select Course" />
+                        <field
+                            name="subject_ids"
+                            domain="[('course_ids', '=', course_ids)]"
+                            placeholder="Select Subjects"
+                        />
+                        <field
+                            name="student_ids"
+                            domain="[('subject_ids', '=', subject_ids)]"
+                            widget="many2many_tags"
+                            placeholder="Select Students"
+                        />
                     </group>
                 </sheet>
             </form>
@@ -59,11 +86,11 @@
             <field name="model">exam.details</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="exam_id"/>
-                    <field name="name"/>
-                    <field name="exam_date"/>
-                    <field name="course_ids"/>
-                    <field name="subject_ids"/>
+                    <field name="exam_id" />
+                    <field name="name" />
+                    <field name="exam_date" />
+                    <field name="course_ids" />
+                    <field name="subject_ids" />
                 </search>
             </field>
         </record>
@@ -75,7 +102,7 @@
         <field name="model">exam.details</field>
         <field name="arch" type="xml">
             <calendar date_start="exam_date">
-                <field name="subject_ids"/>
+                <field name="subject_ids" />
             </calendar>
         </field>
     </record>

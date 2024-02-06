@@ -1,7 +1,8 @@
-from datetime import date
-from odoo import models, fields, api
-from odoo.exceptions import ValidationError, UserError
 import re
+from datetime import date
+
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
 
 
 class StudentDetails(models.Model):
@@ -9,20 +10,20 @@ class StudentDetails(models.Model):
     _description = "Details about the students"
     _rec_name = "name"
 
-    name = fields.Char(string="Name", required=True, help="Enter student name")
+    name = fields.Char(string="name", required=True, help="Enter student name")
     student_id = fields.Char(
         string="student ID", required=True, index=True, copy=False, default="new"
     )
     gender = fields.Selection(
-        [("male", "Male"), ("female", "Female")], string="Gender", required=True
+        [("male", "Male"), ("female", "Female")], string="gender", required=True
     )
     birth_date = fields.Date(string="Date Of birth")
-    age = fields.Integer(string="Age", compute="_compute_age")
-    father_name = fields.Char(string="Father Name")
-    mother_name = fields.Char(string="Mother Name")
-    phone_number = fields.Char(string="Phone Number")
+    age = fields.Integer(string="age", compute="_compute_age")
+    father_name = fields.Char()
+    mother_name = fields.Char()
+    phone_number = fields.Char()
     image = fields.Binary()
-    email = fields.Char(string="Email")
+    email = fields.Char()
     teacher_ids = fields.Many2many(
         comodel_name="teachers.details",
         relation="student_teacher_rel",
@@ -59,20 +60,24 @@ class StudentDetails(models.Model):
         relation="student_activity_rel",
         column1="activity_id",
         column2="student_id",
-        string="Activities"
+        string="Activities",
     )
 
     result_name = fields.One2many(
         comodel_name="result.details", inverse_name="student_name", string="result"
     )
 
-    teachers_count = fields.Integer(string="Teachers", compute="_count_of_teachers")
-    subject_count = fields.Integer(string="Subjects", compute="_count_of_subjects")
-    exam_count = fields.Integer("Exams", compute="_count_of_exams")
+    teachers_count = fields.Integer(
+        string="Teachers", compute="_compute_count_of_teachers"
+    )
+    subject_count = fields.Integer(
+        string="Subjects", compute="_compute_count_of_subjects"
+    )
+    exam_count = fields.Integer("Exams", compute="_compute_count_of_exams")
 
     # calculate age form the date of birth
 
-    def _compute_age(self):
+    def _compute_compute_age(self):
         for records in self:
             today = date.today()
             current_year = today.year
@@ -83,11 +88,11 @@ class StudentDetails(models.Model):
             ):
                 records.age = today.year - records.birth_date.year
             else:
-                raise ValidationError("Enter valid birthdate")
+                raise ValidationError(_("Enter valid birthdate"))
 
     # count of teachers
 
-    def _count_of_teachers(self):
+    def _compute_count_of_teachers(self):
         for record in self:
             record.teachers_count = self.env["teachers.details"].search_count(
                 [("student_ids", "=", self.name)]
@@ -95,7 +100,7 @@ class StudentDetails(models.Model):
 
     # count of subjects
 
-    def _count_of_subjects(self):
+    def _compute_count_of_subjects(self):
         for record in self:
             record.subject_count = self.env["subject.details"].search_count(
                 [("student_ids", "=", self.name)]
@@ -103,7 +108,7 @@ class StudentDetails(models.Model):
 
     # count of exams
 
-    def _count_of_exams(self):
+    def _compute_count_of_exams(self):
         for record in self:
             record.exam_count = self.env["exam.details"].search_count(
                 [("student_ids", "=", self.name)]
@@ -200,9 +205,9 @@ class StudentDetails(models.Model):
     @api.onchange("phone_number")
     def validate_phone(self):
         if self.phone_number:
-            match = re.match("^[0-9]\d{9}$", self.phone_number)
-            if match == None:
-                raise ValidationError("Enter Valid 10 digit Phone Number")
+            match = re.match(r"^[0-9]\d{9}$", self.phone_number)
+            if match == None:  # noqa: E711
+                raise ValidationError(_("Enter Valid 10 digit Phone Number"))
 
     # email validation
 
@@ -210,11 +215,11 @@ class StudentDetails(models.Model):
     def validate_mail(self):
         if self.email:
             match = re.match(
-                "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$",
+                r"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$",
                 self.email,
             )
-            if match == None:
-                raise ValidationError("Not a valid E-mail ID")
+            if match == None:  # noqa: E711
+                raise ValidationError(_("Not a valid E-mail ID"))
 
     # sequence of student id
 
@@ -236,7 +241,7 @@ class StudentDetails(models.Model):
     def unlink(self):
         for record in self:
             if record.exam_ids:
-                raise UserError(("You cannot Delete this record"))
+                raise UserError(_("You cannot Delete this record"))
         return super(StudentDetails, self).unlink()
 
     # ORM name get method for display name for many2many tags

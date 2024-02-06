@@ -1,21 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-    <odoo>
-        <data>
-
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
 <!--Form View-->
             <record id="res_config_settings_view_form" model="ir.ui.view">
                 <field name="name">res.config.settings.view.form.school</field>
                 <field name="model">res.config.settings</field>
-                <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+                <field name="inherit_id" ref="base.res_config_settings_view_form" />
                 <field name="arch" type="xml">
                     <xpath expr="//div[hasclass('settings')]" position="inside">
-                        <div class="app_settings_block" data-string="School" id="school" string="School" data-key="school_management">
+                        <div
+                    class="app_settings_block"
+                    data-string="School"
+                    id="school"
+                    string="School"
+                    data-key="school_management"
+                >
                             <h2>School Management</h2>
 
-                            <div class="row mt16 o_settings_container" id="school_setting">
+                            <div
+                        class="row mt16 o_settings_container"
+                        id="school_setting"
+                    >
                                 <div class="cpl-12 col-lg-6 o_setting_box">
 
-                                    <div class="o_setting_left_pane"/>
+                                    <div class="o_setting_left_pane" />
 
                                     <div class="o_setting_right_pane">
 
@@ -23,41 +30,56 @@
 
                                         <div class="text-muted content-group mt16">
                                             <span>Send an Alert</span>
-                                            <field name="cancel_days" class="text-center oe_inline"/>
+                                            <field
+                                        name="cancel_days"
+                                        class="text-center oe_inline"
+                                    />
                                             <span>Days</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row mt16 o_settings_container" id="school_setting">
+                            <div
+                        class="row mt16 o_settings_container"
+                        id="school_setting"
+                    >
                                 <div class="cpl-12 col-lg-6 o_setting_box">
 
-                                    <div class="o_setting_left_pane"/>
+                                    <div class="o_setting_left_pane" />
 
                                     <div class="o_setting_right_pane">
                                         <span class="o_form_label">After Days</span>
 
                                         <div class="text-muted content-group mt16">
                                             <span>Send an Alert</span>
-                                            <field name="return_days" class="text-center oe_inline"/>
+                                            <field
+                                        name="return_days"
+                                        class="text-center oe_inline"
+                                    />
                                             <span>Days</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row mt16 o_settings_container" id="school_setting">
+                            <div
+                        class="row mt16 o_settings_container"
+                        id="school_setting"
+                    >
                                 <div class="cpl-12 col-lg-6 o_setting_box">
 
-                                    <div class="o_setting_left_pane"/>
+                                    <div class="o_setting_left_pane" />
                                     <div class="o_setting_right_pane">
 
                                         <span class="o_form_label">After Months</span>
 
                                         <div class="text-muted content-group mt16">
                                             <span>Send an Alert</span>
-                                            <field name="course_months" class="text-center oe_inline"/>
+                                            <field
+                                        name="course_months"
+                                        class="text-center oe_inline"
+                                    />
                                             <span>Months</span>
                                         </div>
                                     </div>
@@ -76,7 +98,9 @@
                 <field name="res_model">res.config.settings</field>
                 <field name="view_mode">form</field>
                 <field name="target">inline</field>
-                <field name="context">{'module':'school_management','bin_size':False}</field>
+                <field
+            name="context"
+        >{'module':'school_management','bin_size':False}</field>
             </record>
-        </data>
+
     </odoo>

@@ -1,9 +1,9 @@
-from . import student_details
-from . import teachers_details
-from . import course_details
-from . import subject_details
-from . import exam_details
-from . import result_details
-from . import library_details
-from . import res_config_settings
-from . import activity_details
+from . import student_details  # noqa: F401
+from . import teachers_details  # noqa: F401
+from . import course_details  # noqa: F401
+from . import subject_details  # noqa: F401
+from . import exam_details  # noqa: F401
+from . import result_details  # noqa: F401
+from . import library_details  # noqa: F401
+from . import res_config_settings  # noqa: F401
+from . import activity_details  # noqa: F401

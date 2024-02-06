@@ -1,5 +1,4 @@
-from odoo import models, fields, api
-from dateutil.relativedelta import relativedelta
+from odoo import api, fields, models
 
 
 class ExamDetails(models.Model):
@@ -7,13 +6,10 @@ class ExamDetails(models.Model):
     _description = "Details about the exam"
     _rec_name = "name"
 
-    name = fields.Char(string="Name", required=True, help="Enter a exam name")
-    exam_id = fields.Char(
-        string="Exam ID", required=True, index=True, copy=False, default="new"
-    )
+    name = fields.Char(string="name", required=True, help="Enter a exam name")
+    exam_id = fields.Char(required=True, index=True, copy=False, default="new")
     exam_date = fields.Date(string="Date Of Exam", help="enter date of exam")
-    confirm_date = fields.Date(string="Confirm Date")
-    duration = fields.Char(string="Duration")
+    duration = fields.Char(string="duration")
     course_ids = fields.Many2one("course.details", string="Course Name", required=True)
     subject_ids = fields.Many2one(
         comodel_name="subject.details", string="Subject Name", required=True
@@ -28,11 +24,13 @@ class ExamDetails(models.Model):
     exam_type = fields.Char(string="exam Type")
     exam_marks = fields.Integer(string="Marks")
 
-    student_count = fields.Integer(string="Students", compute="_count_of_students")
+    student_count = fields.Integer(
+        string="Students", compute="_compute_count_of_students"
+    )
 
     # count of students
 
-    def _count_of_students(self):
+    def _compute_count_of_students(self):
         for record in self:
             record.student_count = self.env["student.details"].search_count(
                 [("exam_ids", "=", self.name)]
@@ -104,12 +102,3 @@ class ExamDetails(models.Model):
                 ("duration", operator, name),
             ]
         return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)
-
-# get confirm date using system parameters
-
-    @api.onchange("exam_date")
-    def get_confirm_date(self):
-        days = self.env["ir.config_parameter"].get_param(
-            "school_management_cancel_days"
-        )
-        self.confirm_date = self.exam_date + relativedelta(days=int(days))
