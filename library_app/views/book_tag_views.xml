@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+
+<!--Tree View-->
+
+        <record id="book_tag_tree" model="ir.ui.view">
+            <field name="name">book.tags.tree</field>
+            <field name="model">book.tags</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="color" widget="color_picker"/>
+                </tree>
+            </field>
+        </record>
+
+<!--Form View-->
+
+        <record id="book_tag_form" model="ir.ui.view">
+            <field name="name">book.tags.form</field>
+            <field name="model">book.tags</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                         <div class="oe_button_box" name="button_box">
+                        <button class="oe_state_button" type="object" name="action_view_book" icon="fa-book">
+                            <field string="Books" name="book_count" widget="statinfo"/>
+                        </button>
+                    </div>
+
+                        <group>
+                            <field name="name"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="book_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+<!--Action View-->
+
+        <record id="action_book_tags" model="ir.actions.act_window">
+            <field name="name">books.tags</field>
+            <field name="res_model">book.tags</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </odoo>

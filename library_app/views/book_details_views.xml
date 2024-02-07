@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--Kanban view -->
+
+    <record id="view_book_details_kanban" model="ir.ui.view">
+        <field name="model">book.details</field>
+        <field name="arch" type="xml">
+
+            <kanban default_group_by="book_type" class="o_kanban_small_column o_kanban_project_tasks" on_create="quick_create" quick_create_view="project.quick_create_task_form" archivable="false" default_order="last_borrow_date" examples="project" js_class="project_task_kanban" sample="1" create="0">
+               <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_title">
+                                <!-- Title area ... -->
+                                    <strong>
+                                        <field name="image" widget="image"/>
+                                    </strong>
+                                </div>
+
+                                <div class="o_kanban_record_body">
+                                 <!-- Other content area ... -->
+                                    <div>
+                                        <strong>
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <field name="book_type"/>
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="o_kanban_record_bottom">
+
+                                    <div class="oe_kanban_bottom_left">
+
+                                        <!-- Left side footer... -->
+                                    </div>
+
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="average_rating"/>
+
+                                        <!-- Right side footer... -->
+                                    </div>
+                                </div><!-- o_kanban_record_bottom -->
+
+                                <div class="oe_clear"/>
+                            </div>
+                                <!-- oe_kanban_content -->
+                            <div class="o_dropdown_kanban dropdown">
+                                <!-- Top-right drop down menu ... -->
+                                <a class="dropdown-toggle btn" role="button"
+                                data-toggle="dropdown" title="Dropdown menu" href="#">
+                                    <span class="fa fa-ellipsis-v" />
+                                </a>
+
+                                <div class="dropdown-menu" role="menu">
+                                    <!-- Edit menu option -->
+                                    <t t-if="widget.editable">
+                                        <a role="menuitem" type="edit"
+                                        class="dropdown-item">Edit</a>
+                                    </t>
+
+                                    <!-- Delete menu option -->
+                                    <t t-if="widget.deletable">
+                                        <a role="menuitem" type="delete"
+                                        class="dropdown-item">Delete</a>
+                                    </t>
+                                </div>
+                            </div>
+                        </div><!-- oe_kanban_global_click -->
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+<!--Tree view -->
+
+    <record id="view_book_details_tree" model="ir.ui.view">
+        <field name="name">book.details.tree</field>
+        <field name="model">book.details</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="book_id"/>
+                <field name="name"/>
+                <field name="book_type"/>
+                <field name="date_published"/>
+                <field name="average_rating"/>
+                <field name="is_available" widget="boolean_toggle"/>
+                <field name="last_borrow_date" optional="show"/>
+                <field name="rent_price"/>
+                <field name="tag_ids" widget="many2many_tags" optional="show"/>
+                <field name="borrower_ids" widget="many2many_tags"/>
+                <field name="state" widget="badge" optional="hide" decoration-success="state == 'available'" decoration-danger="state == 'not_avalible'"/>
+                <field name="color" widget="color_picker" optional="show"/>
+                <field name="priority" widget="priority" optional="show"/>
+                </tree>
+        </field>
+    </record>
+
+<!--Form view -->
+
+    <record id="view_book_details_form" model="ir.ui.view">
+        <field name="name">book.details.form</field>
+        <field name="model">book.details</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_state_button" type="object" name="action_view_borrower" icon="fa-users">
+                            <field string="Borrower" name="borrower_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+
+                    <header>
+                        <button id="button_return" name="action_return" string="Return Book" class="oe_edit_only oe_highlight" type="object" confirm="Please Remove the borrower name who returns a book"/>
+                        <button id="button_borrow" name="action_borrow" string="Borrow Book" class="oe_edit_only oe_highlight" type="object" attrs="{'invisible' : [('number_of_books','=',0)]}" confirm="Please Enter the borrower name who borrows a book"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+
+                    <div>
+                        <h1>
+                            <field name="priority" widget="priority"/>
+                        </h1>
+                    </div>
+
+                    <group name="group_top">
+                        <group name="group_left">
+                            <field name="book_id"/>
+                            <field name="name" placeholder="Enter book name"/>
+                            <field name="book_type" placeholder="select book type"/>
+                            <field name="description" widget="text" placeholder="Enter book description"/>
+                            <field name="date_published"/>
+                            <field name="average_rating" placeholder="Enter book ratings"/>
+                            <field name="rent_price" placeholder="Enter rent Price of book"/>
+                            <field name="active"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                            <field name="progress" widget="percentpie"/>
+                        </group>
+
+                        <group name="group_right">
+                            <field name="is_available" widget="boolean_toggle"/>
+                             <field name="last_borrow_date"/>
+                             <field name="date_returned"/>
+                             <field name="borrower_ids" widget="many2many_tags"/>
+                             <field name="number_of_books" placeholder="Enter number of books"/>
+                             <field name="color" widget="color_picker"/>
+                             <field name="image" widget="image"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+<!--Search view -->
+
+    <record id="view_book_details_search" model="ir.ui.view">
+        <field name="name">book.details.search</field>
+        <field name="model">book.details</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="book_type"/>
+                <field name="date_returned"/>
+                <field name="average_rating"/>
+                <field name="date_published"/>
+                <field name="last_borrow_date"/>
+                <filter name="archived" string="Archived" domain="[('active','=',False)]"/>
+                <filter name="filter_rating" string="Avrage rating" domain="[('average_rating','>','2.5')]"/>
+                <filter name="group_type" string="By Type" context="{'group_by': 'book_type'}"/>
+            </search>
+        </field>
+    </record>
+
+<!--Graph view -->
+
+    <record id="book_details_graph" model="ir.ui.view">
+        <field name="name">books.details.graph</field>
+        <field name="model">book.details</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+            <graph string="Book" type="bar">
+                <field name="average_rating"/>
+                <field name="book_type" operator="*"/>
+            </graph>
+    </field>
+    </record>
+
+<!--Calender view -->
+
+    <record id="book_details_calender" model="ir.ui.view">
+        <field name="name">books.details.calender</field>
+        <field name="model">book.details</field>
+        <field name="arch" type="xml">
+            <calendar date_start="last_borrow_date">
+                <field name="name" />
+            </calendar>
+        </field>
+    </record>
+
+<!--Pivot view -->
+
+    <record id="book_details_pivot" model="ir.ui.view">
+        <field name="name">books.details.pivot</field>
+        <field name="model">book.details</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="book_type" type="col" />
+                <field name="name" />
+                <field name="last_borrow_date" interval="week" />
+                <field name="average_rating" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+
+<!--Action view -->
+
+    <record id="action_book_details" model="ir.actions.act_window">
+        <field name="name">books.details</field>
+        <field name="res_model">book.details</field>
+        <field name="view_mode">kanban,tree,form,graph,calendar,pivot,activity</field>
+    </record>
+</odoo>
